@@ -2,8 +2,12 @@ import type { ReadDataType } from './utils';
 import { readVarInt, writeVarInt } from './varint';
 
 export function readString(buffer: Buffer): ReadDataType<string> {
-  const length = readVarInt(buffer).value;
-  return { length, value: buffer.toString('utf8', length) };
+  const { length } = readVarInt(buffer);
+
+  return {
+    length,
+    value: buffer.subarray(length).toString('utf8')
+  };
 }
 
 export function writeString(value: string): Buffer {
