@@ -4,6 +4,7 @@ export * from './double';
 export * from './float';
 export * from './int';
 export * from './long';
+export * from './optional';
 export * from './short';
 export * from './string';
 export * from './utils';

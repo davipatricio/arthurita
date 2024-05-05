@@ -1,7 +1,7 @@
 import type { ReadDataType } from './utils';
 
 export function readFloat(buffer: Buffer): ReadDataType<number> {
-  return { length: 4, value: buffer.readFloatLE(0) };
+  return { length: 4, value: Number.parseFloat(buffer.readFloatLE(0).toFixed(6)) };
 }
 
 export function writeFloat(value: number): Buffer {

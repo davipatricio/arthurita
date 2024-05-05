@@ -1,39 +1,40 @@
 import type { ReadDataType } from './utils';
 
-const SEGMENT_BITS = 0x7f as const;
-const CONTINUE_BIT = 0x80 as const;
+export const SEGMENT_BITS = 0x7f as const;
+export const CONTINUE_BIT = 0x80 as const;
 
 export function readVarInt(buffer: Buffer): ReadDataType<number> {
+  let result = 0;
+  let shift = 0;
   let length = 0;
-  let value = 0;
+  let byte = 0;
 
-  while (true) {
-    const byte = buffer.readUint8(length);
-    value |= (byte & SEGMENT_BITS) << (7 * length);
-    length++;
+  do {
+    byte = buffer[length++];
+    result |= (byte & SEGMENT_BITS) << shift;
+    shift += 7;
+  } while (byte & CONTINUE_BIT);
 
-    if ((byte & CONTINUE_BIT) === 0) break;
-  }
+  let value = result >>> 1;
+
+  //  Adjust for negative numbers
+  if (result & 1) value = -value;
 
   return { length, value };
 }
 
 export function writeVarInt(value: number): Buffer {
-  const buffer = Buffer.allocUnsafe(5);
-  let length = 0;
-  let varint = value;
+  const result: number[] = [];
+  let val = value < 0 ? (-value << 1) | 1 : value << 1;
 
-  while (true) {
-    const byte = varint & SEGMENT_BITS;
-    varint >>= 7;
-    if (varint === 0) {
-      buffer.writeUint8(byte, length);
-      break;
-    }
+  do {
+    let byte = val & SEGMENT_BITS;
+    val >>>= 7;
 
-    buffer.writeUint8(byte | CONTINUE_BIT, length);
-    length++;
-  }
+    if (val) byte |= CONTINUE_BIT;
 
-  return buffer.subarray(0, length + 1);
+    result.push(byte);
+  } while (val);
+
+  return Buffer.from(result);
 }
