@@ -18,3 +18,9 @@ export interface StatusResponsePayload {
   previewsChat: boolean;
   favicon?: string;
 }
+
+export enum PlayerSettingsChatMode {
+  Enabled = 0,
+  CommandsOnly = 1,
+  Hidden = 2
+}

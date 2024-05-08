@@ -1,4 +1,4 @@
-import type { UncompressedPacket } from '@arthurita/packets';
+import type { UncompressedPacket, PlayerSettingsChatMode } from '@arthurita/packets';
 import { randomBytes } from 'node:crypto';
 import type { Socket } from 'node:net';
 import type { MCServer } from './MCServer';
@@ -15,6 +15,12 @@ export class Player {
   public name: string;
   public state = PlayerState.Handshaking;
   public version = -1;
+
+  // Fields below are only set if state is Playing
+  public locale: string;
+  public viewDistance: number;
+  public chatMode: PlayerSettingsChatMode;
+  public hasChatColors: boolean;
 
   constructor(
     public socket: Socket,
