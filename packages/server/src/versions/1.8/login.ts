@@ -1,4 +1,5 @@
 import { PlayerState, type Player } from '@/structures/Player';
+import { writeString } from '@arthurita/encoding';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { ServerDifficulty, getVersionPackets } from '@arthurita/packets';
 
@@ -9,9 +10,14 @@ export function handleLoginStart(packet: UncompressedPacket, player: Player) {
   const loginPacket = new packets.LoginServerboundLoginStartPacket(packet.data);
 
   player.name = loginPacket.playerName;
+  player.state = PlayerState.Play;
 
   sendLoginSuccess(player);
-  player.state = PlayerState.Play;
+
+  // https://wiki.vg/index.php?title=Plugin_channels&oldid=7435#MC.7CBrand
+  // For version 1.12.2(protocol version 340) and below, channel name is: MC|Brand
+  const brandPacket = new packets.PlayClientboundPluginMessagePacket('MC|Brand', writeString('arthurita'));
+  player.sendPacket(brandPacket);
 
   const joinGamePacket = new packets.PlayClientboundJoinGamePacket();
   player.sendPacket(joinGamePacket);
