@@ -1,11 +1,11 @@
 import ServerListPingEvent from '@/events/ServerListPingEvent';
-import type { UnknownPlayer } from '@/structures/UnknownPlayer';
+import type { Player } from '@/structures/Player';
 import callEvents from '@/utils/callEvents';
 import { readLong } from '@arthurita/encoding';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { getVersionPackets } from '@arthurita/packets';
 
-export function handleStatusRequest(_packet: UncompressedPacket, player: UnknownPlayer) {
+export function handleStatusRequest(_packet: UncompressedPacket, player: Player) {
   const event = new ServerListPingEvent(player);
   callEvents(player.server, 'serverListPing', event);
 
@@ -15,7 +15,7 @@ export function handleStatusRequest(_packet: UncompressedPacket, player: Unknown
   player.sendPacket(packet);
 }
 
-export function handlePingRequest(packet: UncompressedPacket, player: UnknownPlayer) {
+export function handlePingRequest(packet: UncompressedPacket, player: Player) {
   const packets = getVersionPackets(player.version);
   const payload = readLong(packet.data);
 

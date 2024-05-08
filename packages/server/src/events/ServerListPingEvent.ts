@@ -1,12 +1,12 @@
 import type { MCServer } from '@/structures/MCServer';
 import type { StatusResponsePayload } from '@arthurita/packets';
-import type { UnknownPlayer } from '..';
+import type { Player } from '..';
 
 export default class ServerListPingEvent {
   public readonly data: StatusResponsePayload;
   public readonly server: MCServer;
 
-  public constructor(public readonly player: UnknownPlayer) {
+  public constructor(public readonly player: Player) {
     this.server = player.server;
 
     this.data = {

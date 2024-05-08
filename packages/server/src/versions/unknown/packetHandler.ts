@@ -1,8 +1,8 @@
-import { PlayerState, type UnknownPlayer } from '@/structures/UnknownPlayer';
+import { PlayerState, type Player } from '@/structures/Player';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { handleHandshake } from './handshake';
 
-export function packetHandler(packet: UncompressedPacket, player: UnknownPlayer) {
+export function packetHandler(packet: UncompressedPacket, player: Player) {
   switch (player.state) {
     case PlayerState.Handshaking: {
       handleHandshakePackets(packet, player);
@@ -16,7 +16,7 @@ export function packetHandler(packet: UncompressedPacket, player: UnknownPlayer)
   }
 }
 
-function handleHandshakePackets(packet: UncompressedPacket, player: UnknownPlayer) {
+function handleHandshakePackets(packet: UncompressedPacket, player: Player) {
   switch (packet.id) {
     case 0x00: {
       handleHandshake(packet, player);

@@ -1,6 +1,5 @@
 import { Server } from 'node:net';
-import { PlayerState, UnknownPlayer } from './UnknownPlayer';
-import type { Player } from './Player';
+import { PlayerState, Player } from './Player';
 import { UncompressedPacket } from '@arthurita/packets';
 import handleIncomingPacket from '@/versions/packetHandler';
 import EventEmitter from 'node:events';
@@ -17,7 +16,7 @@ export class MCServer extends EventEmitter {
   /**
    * Don't use this directly. Use `server.players` to get all connected players
    */
-  public _rawPlayers: Map<string, UnknownPlayer> = new Map();
+  public _rawPlayers: Map<string, Player> = new Map();
 
   constructor(options?: Partial<MCServerOptions>) {
     super();
@@ -47,7 +46,7 @@ export class MCServer extends EventEmitter {
 
   private setupListeners() {
     this.netServer.on('connection', (socket) => {
-      const player = new UnknownPlayer(socket, this);
+      const player = new Player(socket, this);
       this._rawPlayers.set(player.name, player);
 
       socket.on('data', (data) => {
