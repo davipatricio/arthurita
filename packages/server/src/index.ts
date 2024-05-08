@@ -13,7 +13,6 @@ server.on('connection', (socket) => {
     const packets = UncompressedPacket.fromBuffer(data);
 
     for (const packet of packets) {
-      console.log(packet);
       handleIncomingPacket(packet, player);
     }
   });

@@ -1,7 +1,8 @@
 import { UncompressedPacket } from '@/structures';
+import type { ServerboundPacket } from '@/typings';
 import { readString, readUnsignedShort, readVarInt } from '@arthurita/encoding';
 
-export class StatusServerboundStatusRequestPacket extends UncompressedPacket {
+export class StatusServerboundHandshakePacket extends UncompressedPacket implements ServerboundPacket {
   public protocolVersion!: number;
   public serverAddress!: string;
   public serverPort!: number;
@@ -10,12 +11,19 @@ export class StatusServerboundStatusRequestPacket extends UncompressedPacket {
   constructor(data: Buffer) {
     super();
 
-    this.setID(0x00);
-    this.setData(data);
-    this.decode();
+    this.setID(0x00).setData(data)._decode();
   }
 
-  private decode() {
+  toJSON() {
+    return {
+      protocolVersion: this.protocolVersion,
+      serverAddress: this.serverAddress,
+      serverPort: this.serverPort,
+      nextState: this.nextState
+    };
+  }
+
+  _decode() {
     let offset = 0;
     const protocolVersion = readVarInt(this.data);
     offset += protocolVersion.length;

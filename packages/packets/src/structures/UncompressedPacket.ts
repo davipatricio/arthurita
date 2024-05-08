@@ -18,8 +18,20 @@ export class UncompressedPacket {
     return this;
   }
 
+  toBuffer() {
+    const _packetId = writeVarInt(this.id);
+
+    return Buffer.concat([
+      this.lengthBuffer,
+      _packetId,
+      this.data
+    ]);
+  }
+
   get length() {
-    return readVarInt(writeVarInt(this.id)).length + readVarInt(writeVarInt(this.data.length)).length;
+    const _packetId = writeVarInt(this.id);
+    const _packetLength = writeVarInt(_packetId.length + this.data.length);
+    return readVarInt(_packetLength).value
   }
 
   get lengthBuffer() {

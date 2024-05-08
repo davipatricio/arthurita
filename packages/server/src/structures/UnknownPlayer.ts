@@ -1,3 +1,4 @@
+import type { UncompressedPacket } from '@arthurita/packets';
 import { randomBytes } from 'node:crypto';
 import type { Socket } from 'node:net';
 
@@ -16,5 +17,11 @@ export class UnknownPlayer {
 
   constructor(public socket: Socket) {
     this.name = `unknown-${randomBytes(10).toString('hex')}`;
+  }
+
+  sendPacket(packet: UncompressedPacket) {
+    if (this.socket.destroyed) return;
+
+    this.socket.write(packet.toBuffer());
   }
 }
