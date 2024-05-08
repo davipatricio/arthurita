@@ -1,39 +1,20 @@
 import { createServer } from 'node:net';
-import { UncompressedPacket } from './structures/UncompressedPacket';
-import { readString, readUnsignedShort, readVarInt } from '@arthurita/encoding';
-import { PlayerState, UnknownPlayer } from './structures/UnknownPlayer';
+import { UncompressedPacket } from '@arthurita/packets';
+import { UnknownPlayer } from './structures/UnknownPlayer';
+import handleIncomingPacket from './versions/packetHandler';
 
 const server = createServer();
 
 server.on('connection', (socket) => {
+  console.log('connection');
+  const player = new UnknownPlayer(socket);
+
   socket.on('data', (data) => {
-    const player = new UnknownPlayer(socket);
+    const packets = UncompressedPacket.fromBuffer(data);
 
-    const packet = UncompressedPacket.fromBuffer(data);
-    switch (player.state) {
-      case PlayerState.Handshaking: {
-        if (packet.id === 0x00) {
-          let offset = 0;
-          const protocolVersion = readVarInt(packet.data);
-          offset += protocolVersion.length;
-
-          const serverAddress = readString(packet.data.subarray(offset));
-          offset += serverAddress.length;
-
-          const serverPort = readUnsignedShort(packet.data.subarray(offset));
-          offset += serverPort.length;
-
-          const nextState = readVarInt(packet.data.subarray(offset));
-          offset += nextState.length;
-
-          console.log({
-            protocolVersion: protocolVersion.value,
-            serverAddress: serverAddress.value,
-            serverPort: serverPort.value,
-            nextState: nextState.value
-          });
-        }
-      }
+    for (const packet of packets) {
+      console.log(packet);
+      handleIncomingPacket(packet, player);
     }
   });
 });

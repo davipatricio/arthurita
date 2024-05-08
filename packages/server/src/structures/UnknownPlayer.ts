@@ -10,8 +10,9 @@ export enum PlayerState {
 }
 
 export class UnknownPlayer {
-  public state: PlayerState = 0;
   public name: string;
+  public state = PlayerState.Handshaking;
+  public version = -1;
 
   constructor(public socket: Socket) {
     this.name = `unknown-${randomBytes(10).toString('hex')}`;
