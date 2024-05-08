@@ -13,6 +13,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": false,
     // Additional Type-Checking Options
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

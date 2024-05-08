@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsup --watch --onSuccess=\"node dist/\"",
+    "dev": "tsup --watch --onSuccess=\"node examples/server.js\"",
     "build": "tsup",
     "lint": "biome check .",
     "format": "biome check --apply-unsafe .",

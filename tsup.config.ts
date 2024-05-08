@@ -8,7 +8,7 @@ export function createTsupConfig({
   format = ['esm', 'cjs'],
   target = 'es2022',
   skipNodeModulesBundle = true,
-  clean = true,
+  clean = false,
   shims = format.includes('cjs'),
   cjsInterop = format.includes('cjs'),
   minify = false,

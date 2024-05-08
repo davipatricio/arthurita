@@ -3,10 +3,10 @@ import type { ServerboundPacket } from '@/typings';
 import { readString, readUnsignedShort, readVarInt } from '@arthurita/encoding';
 
 export class StatusServerboundHandshakePacket extends UncompressedPacket implements ServerboundPacket {
-  public protocolVersion!: number;
-  public serverAddress!: string;
-  public serverPort!: number;
-  public nextState!: number;
+  public protocolVersion: number;
+  public serverAddress: string;
+  public serverPort: number;
+  public nextState: number;
 
   constructor(data: Buffer) {
     super();
