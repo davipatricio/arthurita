@@ -11,6 +11,16 @@ export function handleClientSettings(packet: UncompressedPacket, player: Player)
   player.viewDistance = settings.viewDistance;
   player.chatMode = settings.chatMode;
   player.hasChatColors = settings.hasChatColors;
+
+  const playerPositionPacket = new packets.PlayClientboundPlayerPositionAndLookPacket({
+    x: 0,
+    y: 0,
+    z: 0,
+    yaw: 0,
+    pitch: 0,
+    flags: 0
+  });
+  player.sendPacket(playerPositionPacket);
 }
 
 export function handleKeepAlive(packet: UncompressedPacket, player: Player) {
