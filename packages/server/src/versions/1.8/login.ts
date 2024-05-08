@@ -1,4 +1,4 @@
-import type { Player } from '@/structures/Player';
+import { PlayerState, type Player } from '@/structures/Player';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { getVersionPackets } from '@arthurita/packets';
 
@@ -8,4 +8,15 @@ export function handleLoginStart(packet: UncompressedPacket, player: Player) {
   const loginPacket = new packets.LoginServerboundLoginStartPacket(packet.data);
 
   player.name = loginPacket.playerName;
+
+  sendLoginSuccess(player);
+  player.state = PlayerState.Play;
+
+  const joinGamePacket = new packets.PlayClientboundJoinGamePacket();
+  player.sendPacket(joinGamePacket);
+}
+
+function sendLoginSuccess(player: Player) {
+  const packet = new packets.LoginClientboundLoginSuccessPacket(player.name);
+  player.sendPacket(packet);
 }

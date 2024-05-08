@@ -26,8 +26,12 @@
   "devDependencies": {
     "@biomejs/biome": "^1.7.2",
     "@types/node": "^20.12.8",
+    "@types/uuid": "^9.0.8",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
   }
 }

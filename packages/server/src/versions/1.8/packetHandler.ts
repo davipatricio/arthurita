@@ -9,8 +9,13 @@ export function packetHandler(packet: UncompressedPacket, player: Player) {
       handleStatusPackets(packet, player);
       break;
     }
+
     case PlayerState.Login: {
       handleLoginPackets(packet, player);
+      break;
+    }
+
+    case PlayerState.Play: {
       break;
     }
 

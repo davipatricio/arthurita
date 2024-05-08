@@ -8,5 +8,6 @@ export * from './optional';
 export * from './short';
 export * from './string';
 export * from './utils';
+export * from './uuid';
 export * from './varint';
 export * from './varlong';
