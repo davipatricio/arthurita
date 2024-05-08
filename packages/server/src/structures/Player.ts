@@ -26,6 +26,7 @@ export class Player {
   // Internal usage
   private keepAliveId: number;
   private keepAliveInterval: NodeJS.Timeout;
+  private keepAliveAck: boolean;
 
   constructor(
     public socket: Socket,
@@ -47,20 +48,35 @@ export class Player {
         return;
       }
 
+      if (!this.keepAliveAck) return;
+
       this.keepAliveId = Math.floor(Math.random() * 100);
+      this.keepAliveAck = false;
 
       const packetId = writeVarInt(0x00);
       const keepAliveID = writeVarInt(this.keepAliveId);
       const packetLength = writeVarInt(packetId.length + keepAliveID.length);
 
-      console.log('Sending keepalive');
-
       this.socket.write(Buffer.from([...packetLength, ...packetId, ...keepAliveID]));
-    }, 5000);
+
+      // close connection if keepalive is not acknowledged within 30 seconds
+      setTimeout(() => {
+        if (!this.keepAliveAck) {
+          this._stopKeepAlive();
+          this.socket.destroy();
+
+          return;
+        }
+      }, 30000);
+    }, 15000);
   }
 
   _stopKeepAlive() {
     clearInterval(this.keepAliveInterval);
+  }
+
+  _ackKeepAlive() {
+    this.keepAliveAck = true;
   }
 
   _getStoredKeepAliveId() {

@@ -52,16 +52,15 @@ function handleLoginPackets(packet: UncompressedPacket, player: Player) {
 }
 
 function handlePlayPackets(packet: UncompressedPacket, player: Player) {
-  console.log(packet.id);
   switch (packet.id) {
     case 0x00:
       handleKeepAlive(packet, player);
       break;
+    case 0x17:
+      console.log('handle plugin message');
+      break;
     case 0x15:
       handleClientSettings(packet, player);
-      break;
-    case 0x17:
-      // TODO: handle plugin message
       break;
     case 0x04:
       // TODO: Update Player position

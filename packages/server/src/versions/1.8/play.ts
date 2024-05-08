@@ -27,7 +27,7 @@ export function handleKeepAlive(packet: UncompressedPacket, player: Player) {
   const keepAlivePacket = new packets.PlayServerboundKeepAlivePacket(packet.data);
   const id = player._getStoredKeepAliveId();
 
-  if (keepAlivePacket.id !== id) {
+  if (keepAlivePacket.keepAliveId !== id) {
     player._stopKeepAlive();
     player.socket.destroy();
   }

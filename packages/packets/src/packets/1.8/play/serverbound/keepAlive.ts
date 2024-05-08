@@ -3,7 +3,7 @@ import type { ServerboundPacket } from '@/typings';
 import { readVarInt } from '@arthurita/encoding';
 
 export class PlayServerboundKeepAlivePacket extends UncompressedPacket implements ServerboundPacket {
-  public keepAliveId = 0;
+  public keepAliveId: number;
 
   constructor(data: Buffer) {
     super();
