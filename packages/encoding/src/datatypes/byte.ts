@@ -4,7 +4,7 @@ export function readByte(buffer: Buffer): ReadDataType<number> {
   return { length: 1, value: buffer.readUint8(0) };
 }
 
-export function writeByte(value: number): Buffer {
+export function writeByte(value: number) {
   return Buffer.from([value]);
 }
 

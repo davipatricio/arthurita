@@ -2,20 +2,19 @@ import type { ReadDataType } from './utils';
 import { readVarInt, writeVarInt } from './varint';
 
 export function readString(buffer: Buffer): ReadDataType<string> {
-  const { length } = readVarInt(buffer);
+  const { length, value } = readVarInt(buffer.subarray(0,1));
+  const data = buffer.subarray(length, value + length).toString('utf8');
 
-  return {
-    length,
-    value: buffer.subarray(length).toString('utf8')
-  };
+  return { length: value + length, value: data };
 }
 
 export function writeString(value: string): Buffer {
+  if (value.length > 32767) {
+    throw new Error('Maximum string length is 32767');
+  }
+
   const string = Buffer.from(value, 'utf8');
-  const length = writeVarInt(value.length);
+  const textLength = writeVarInt(value.length);
 
-  const buffer = Buffer.allocUnsafe(string.length);
-  string.copy(buffer);
-
-  return Buffer.from([...length, ...buffer]);
+  return Buffer.from([...textLength, ...string]);
 }

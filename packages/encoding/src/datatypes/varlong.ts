@@ -1,41 +1,34 @@
 import type { ReadDataType } from './utils';
 import { CONTINUE_BIT, SEGMENT_BITS } from './varint';
 
-export function readVarLong(buffer: Buffer): ReadDataType<bigint> {
-  let result = 0n;
+export function readVarLong(data: Buffer): ReadDataType<bigint> {
+  let value = 0n;
   let shift = 0;
   let length = 0;
   let byte = 0;
 
   do {
-    byte = buffer[length++];
-    result |= (BigInt(byte) & BigInt(SEGMENT_BITS)) << BigInt(shift);
+    byte = data[length];
+    value |= BigInt(byte & SEGMENT_BITS) << BigInt(shift);
     shift += 7;
+    length++;
   } while (byte & CONTINUE_BIT);
 
-  let value = result >> 1n;
-
-  //  Adjust for negative numbers
-  if (result & 1n) value = BigInt(-value);
-
-  return { length, value };
+  return { value, length };
 }
 
-export function writeVarLong(value: bigint): Buffer {
-  const bytes: number[] = [];
-  let val = value < 0 ? (-value << 1n) | 1n : value << 1n;
+export function writeVarLong(value: bigint) {
+  const buffer: number[] = [];
+  let valueCopy = value;
 
   do {
-    let byte = val & BigInt(SEGMENT_BITS);
-    val >>= 7n;
+    let byte = valueCopy & BigInt(SEGMENT_BITS);
+    valueCopy >>= 7n;
 
-    if (val !== 0n) {
-      byte |= BigInt(CONTINUE_BIT);
-    }
+    if (valueCopy !== 0n) byte |= BigInt(CONTINUE_BIT);
 
-    bytes.push(Number(byte));
-  } while (val !== 0n);
+    buffer.push(Number(byte));
+  } while (valueCopy !== 0n);
 
-  const buffer = Buffer.from(bytes);
-  return buffer;
+  return Buffer.from(buffer);
 }

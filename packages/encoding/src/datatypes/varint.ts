@@ -3,38 +3,34 @@ import type { ReadDataType } from './utils';
 export const SEGMENT_BITS = 0x7f as const;
 export const CONTINUE_BIT = 0x80 as const;
 
-export function readVarInt(buffer: Buffer): ReadDataType<number> {
-  let result = 0;
+export function readVarInt(data: Buffer): ReadDataType<number> {
+  let value = 0;
   let shift = 0;
   let length = 0;
   let byte = 0;
 
   do {
-    byte = buffer[length++];
-    result |= (byte & SEGMENT_BITS) << shift;
+    byte = data[length];
+    value |= (byte & SEGMENT_BITS) << shift;
     shift += 7;
+    length++;
   } while (byte & CONTINUE_BIT);
 
-  let value = result >>> 1;
-
-  //  Adjust for negative numbers
-  if (result & 1) value = -value;
-
-  return { length, value };
+  return { value, length };
 }
 
-export function writeVarInt(value: number): Buffer {
-  const result: number[] = [];
-  let val = value < 0 ? (-value << 1) | 1 : value << 1;
+export function writeVarInt(value: number) {
+  const buffer: number[] = [];
+  let valueCopy = value;
 
   do {
-    let byte = val & SEGMENT_BITS;
-    val >>>= 7;
+    let byte = valueCopy & SEGMENT_BITS;
+    valueCopy >>>= 7;
 
-    if (val) byte |= CONTINUE_BIT;
+    if (valueCopy !== 0) byte |= CONTINUE_BIT;
 
-    result.push(byte);
-  } while (val);
+    buffer.push(byte);
+  } while (valueCopy !== 0);
 
-  return Buffer.from(result);
+  return Buffer.from(buffer);
 }
