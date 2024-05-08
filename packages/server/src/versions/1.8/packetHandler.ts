@@ -4,6 +4,9 @@ import { handleLoginStart } from './login';
 import { handleClientSettings, handleKeepAlive } from './play';
 import { handlePingRequest, handleStatusRequest } from './status';
 
+// https://wiki.vg/index.php?title=Protocol&oldid=7368
+// https://wiki.vg/index.php?title=Protocol_FAQ&oldid=8076
+
 export function packetHandler(packet: UncompressedPacket, player: Player) {
   switch (player.state) {
     case PlayerState.Status: {
@@ -49,6 +52,7 @@ function handleLoginPackets(packet: UncompressedPacket, player: Player) {
 }
 
 function handlePlayPackets(packet: UncompressedPacket, player: Player) {
+  console.log(packet.id);
   switch (packet.id) {
     case 0x00:
       handleKeepAlive(packet, player);
