@@ -3,12 +3,14 @@ import { PlayerState, UnknownPlayer } from './UnknownPlayer';
 import type { Player } from './Player';
 import { UncompressedPacket } from '@arthurita/packets';
 import handleIncomingPacket from '@/versions/packetHandler';
+import EventEmitter from 'node:events';
+import type { MCServerEvents } from '@/types/events';
 
 interface MCServerOptions {
   port: number;
 }
 
-export class MCServer {
+export class MCServer extends EventEmitter {
   public options: MCServerOptions;
   private netServer: Server;
 
@@ -18,6 +20,8 @@ export class MCServer {
   public _rawPlayers: Map<string, UnknownPlayer> = new Map();
 
   constructor(options?: Partial<MCServerOptions>) {
+    super();
+
     this.options = Object.assign({ port: 25565 }, options);
   }
 
@@ -43,7 +47,7 @@ export class MCServer {
 
   private setupListeners() {
     this.netServer.on('connection', (socket) => {
-      const player = new UnknownPlayer(socket);
+      const player = new UnknownPlayer(socket, this);
       this._rawPlayers.set(player.name, player);
 
       socket.on('data', (data) => {
@@ -56,5 +60,21 @@ export class MCServer {
         player.socket.destroy();
       });
     });
+  }
+
+  public on<T extends keyof MCServerEvents>(event: T, listener: MCServerEvents[T]): this {
+    return super.on(event, listener);
+  }
+
+  public once<T extends keyof MCServerEvents>(event: T, listener: MCServerEvents[T]): this {
+    return super.once(event, listener);
+  }
+
+  public off<T extends keyof MCServerEvents>(event: T, listener: MCServerEvents[T]): this {
+    return super.off(event, listener);
+  }
+
+  public emit<T extends keyof MCServerEvents>(event: T, ...args: Parameters<MCServerEvents[T]>): boolean {
+    return super.emit(event, ...args);
   }
 }

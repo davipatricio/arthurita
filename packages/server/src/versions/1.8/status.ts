@@ -1,28 +1,16 @@
+import ServerListPingEvent from '@/events/ServerListPingEvent';
 import type { UnknownPlayer } from '@/structures/UnknownPlayer';
+import callEvents from '@/utils/callEvents';
 import { readLong } from '@arthurita/encoding';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { getVersionPackets } from '@arthurita/packets';
 
-const data = {
-  version: {
-    name: '1.8.9',
-    protocol: 47
-  },
-  players: {
-    max: 100,
-    online: 0,
-    sample: []
-  },
-  description: {
-    text: 'Hello world!\nMulti-line support with §a§lcolors!'
-  },
-  enforcesSecureChat: false,
-  previewsChat: false
-};
-
 export function handleStatusRequest(_packet: UncompressedPacket, player: UnknownPlayer) {
+  const event = new ServerListPingEvent(player);
+  callEvents(player.server, 'serverListPing', event);
+
   const packets = getVersionPackets(player.version);
-  const packet = new packets.StatusClientboundStatusResponsePacket(data);
+  const packet = new packets.StatusClientboundStatusResponsePacket(event.data);
 
   player.sendPacket(packet);
 }

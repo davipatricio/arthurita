@@ -1,27 +1,6 @@
 import { UncompressedPacket } from '@/structures';
-import type { ClientboundPacket } from '@/typings';
+import type { ClientboundPacket, StatusResponsePayload } from '@/typings';
 import { writeString } from '@arthurita/encoding';
-
-export interface StatusResponsePayload {
-  version: {
-    name: string;
-    protocol: number;
-  };
-  players: {
-    max: number;
-    online: number;
-    sample: {
-      id: string;
-      name: string;
-    }[];
-  };
-  description: {
-    text: string;
-  };
-  enforcesSecureChat: boolean;
-  previewsChat: boolean;
-  favicon?: string;
-}
 
 export class StatusClientboundStatusResponsePacket extends UncompressedPacket implements ClientboundPacket {
   constructor(public readonly payload: StatusResponsePayload) {

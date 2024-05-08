@@ -1,6 +1,7 @@
 import type { UncompressedPacket } from '@arthurita/packets';
 import { randomBytes } from 'node:crypto';
 import type { Socket } from 'node:net';
+import type { MCServer } from './MCServer';
 
 export enum PlayerState {
   Handshaking = 0,
@@ -15,7 +16,10 @@ export class UnknownPlayer {
   public state = PlayerState.Handshaking;
   public version = -1;
 
-  constructor(public socket: Socket) {
+  constructor(
+    public socket: Socket,
+    public server: MCServer
+  ) {
     this.name = `unknown-${randomBytes(10).toString('hex')}`;
   }
 
