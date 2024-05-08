@@ -8,7 +8,7 @@ export function readString(buffer: Buffer): ReadDataType<string> {
   return { length: value + length, value: data };
 }
 
-export function writeString(value: string): Buffer {
+export function writeString(value: string) {
   if (value.length > 32767) {
     throw new Error('Maximum string length is 32767');
   }

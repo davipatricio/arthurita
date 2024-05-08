@@ -4,7 +4,7 @@ export function readShort(buffer: Buffer): ReadDataType<number> {
   return { length: 2, value: buffer.readInt16BE() };
 }
 
-export function writeShort(value: number): Buffer {
+export function writeShort(value: number) {
   const buffer = Buffer.allocUnsafe(2);
   buffer.writeInt16BE(value);
 
@@ -15,7 +15,7 @@ export function readUnsignedShort(buffer: Buffer): ReadDataType<number> {
   return { length: 2, value: buffer.readUint16BE() };
 }
 
-export function writeUnsignedShort(value: number): Buffer {
+export function writeUnsignedShort(value: number) {
   const buffer = Buffer.allocUnsafe(2);
   buffer.writeUint16BE(value);
 
