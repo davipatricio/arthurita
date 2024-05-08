@@ -1,6 +1,6 @@
 import { UncompressedPacket } from '@/structures';
 import type { PlayerSettingsChatMode, ServerboundPacket } from '@/typings';
-import { readBoolean, readByte, readString } from '@arthurita/encoding';
+import { readBoolean, readByte, readString, readUnsignedByte } from '@arthurita/encoding';
 
 export class PlayServerboundClientSettingsPacket extends UncompressedPacket implements ServerboundPacket {
   public locale: string;
@@ -39,7 +39,7 @@ export class PlayServerboundClientSettingsPacket extends UncompressedPacket impl
     const hasChatColors = readBoolean(this.data.subarray(offset));
     offset += hasChatColors.length;
 
-    const displayedSkinParts = readByte(this.data.subarray(offset));
+    const displayedSkinParts = readUnsignedByte(this.data.subarray(offset));
     offset += displayedSkinParts.length;
 
     this.locale = locale.value;

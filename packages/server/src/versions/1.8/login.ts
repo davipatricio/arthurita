@@ -17,6 +17,7 @@ export function handleLoginStart(packet: UncompressedPacket, player: Player) {
 
   const serverDifficultyPacket = new packets.PlayClientboundServerDifficultyPacket(ServerDifficulty.PEACEFUL);
   player.sendPacket(serverDifficultyPacket);
+  player._startKeepAlive();
 }
 
 function sendLoginSuccess(player: Player) {

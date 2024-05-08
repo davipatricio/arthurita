@@ -1,7 +1,7 @@
 import { PlayerState, type Player } from '@/structures/Player';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { handleLoginStart } from './login';
-import { handleClientSettings } from './play';
+import { handleClientSettings, handleKeepAlive } from './play';
 import { handlePingRequest, handleStatusRequest } from './status';
 
 export function packetHandler(packet: UncompressedPacket, player: Player) {
@@ -49,10 +49,24 @@ function handleLoginPackets(packet: UncompressedPacket, player: Player) {
 }
 
 function handlePlayPackets(packet: UncompressedPacket, player: Player) {
-  console.log(packet.id);
   switch (packet.id) {
+    case 0x00:
+      handleKeepAlive(packet, player);
+      break;
     case 0x15:
       handleClientSettings(packet, player);
+      break;
+    case 0x17:
+      // TODO: handle plugin message
+      break;
+    case 0x04:
+      // TODO: Update Player position
+      break;
+    case 0x06:
+      // TODO: Player Position And Look
+      break;
+    default:
+      // console.log('Unsupported packet id', packet.id);
       break;
   }
 }
