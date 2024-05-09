@@ -1,6 +1,5 @@
 import { UncompressedPacket } from '@/structures';
 import type { ServerboundPacket } from '@/typings';
-import { readString } from '@arthurita/encoding';
 
 export class LoginServerboundLoginStartPacket extends UncompressedPacket implements ServerboundPacket {
   public playerName: string;
@@ -14,20 +13,12 @@ export class LoginServerboundLoginStartPacket extends UncompressedPacket impleme
 
   toJSON() {
     return {
-      playerName: this.playerName,
-      playerUuid: this.playerUuid
+      playerName: this.playerName
     };
   }
 
   _decode() {
-    let offset = 0;
-    const playerName = readString(this.data);
-    offset += playerName.length;
-
-    const uuid = readString(this.data.subarray(offset));
-    offset += uuid.length;
-
-    this.playerName = playerName.value;
-    this.playerUuid = uuid.value;
+    // Apparently the player name is not prefixed by a length on 1.8.9
+    this.playerName = this.data.toString();
   }
 }
