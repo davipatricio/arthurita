@@ -1,4 +1,4 @@
-import type { UncompressedPacket, PlayerSettingsChatMode } from '@arthurita/packets';
+import { type UncompressedPacket, type PlayerSettingsChatMode, getVersionPackets } from '@arthurita/packets';
 import { randomBytes } from 'node:crypto';
 import type { Socket } from 'node:net';
 import type { MCServer } from './MCServer';
@@ -35,7 +35,13 @@ export class Player {
     this.name = `unknown-${randomBytes(10).toString('hex')}`;
   }
 
-  sendPacket(packet: UncompressedPacket) {
+  send(type: 'actionbar' | 'chatbox', message: string) {
+    const packets = getVersionPackets(this.version);
+    const chatMessagePacket = new packets.PlayClientboundChatMessagePacket(message, type);
+    this._sendPacket(chatMessagePacket);
+  }
+
+  _sendPacket(packet: UncompressedPacket) {
     if (this.socket.destroyed) return;
 
     this.socket.write(packet.toBuffer());

@@ -22,7 +22,7 @@ export function handleClientSettings(packet: UncompressedPacket, player: Player)
     pitch: 0,
     flags: 0
   });
-  player.sendPacket(playerPositionPacket);
+  player._sendPacket(playerPositionPacket);
 
   const event = new PlayerJoinEvent(player);
   callEvents(player.server, 'playerJoin', event);
