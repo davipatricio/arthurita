@@ -57,7 +57,7 @@ function handlePlayPackets(packet: UncompressedPacket, player: Player) {
       handleKeepAlive(packet, player);
       break;
     case 0x17:
-      console.log('handle plugin message');
+      // TODO: Plugin Message MC|Brand
       break;
     case 0x15:
       handleClientSettings(packet, player);
