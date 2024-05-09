@@ -11,11 +11,11 @@ export class PlayClientboundChatMessagePacket extends UncompressedPacket impleme
   ) {
     super();
 
-    this.setID(0x05)._encode();
+    this.setID(0x02)._encode();
   }
 
   _encode() {
-    const text = writeString(this.payload);
+    const text = writeString(JSON.stringify({ text: this.payload }));
     const postion = writeByte(this.position === 'chatbox' ? 0 : 2);
 
     const data = Buffer.concat([text, postion]);

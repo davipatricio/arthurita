@@ -11,4 +11,5 @@ server.on('serverListPing', (event) => {
 
 server.on('playerJoin', (event) => {
   console.log(`[Minecraft Server] ${event.player.name} joined the server!`);
+  server.broadcast('chatbox', `§e${event.player.name} joined the server.`);
 });
