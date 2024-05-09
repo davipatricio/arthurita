@@ -1,4 +1,6 @@
+import { PlayerJoinEvent } from '@/events';
 import type { Player } from '@/structures/Player';
+import callEvents from '@/utils/callEvents';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { getVersionPackets } from '@arthurita/packets';
 
@@ -21,6 +23,9 @@ export function handleClientSettings(packet: UncompressedPacket, player: Player)
     flags: 0
   });
   player.sendPacket(playerPositionPacket);
+
+  const event = new PlayerJoinEvent(player);
+  callEvents(player.server, 'playerJoin', event);
 }
 
 export function handleKeepAlive(packet: UncompressedPacket, player: Player) {

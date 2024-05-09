@@ -1,4 +1,4 @@
-import ServerListPingEvent from '@/events/ServerListPingEvent';
+import { ServerListPingEvent } from '@/events';
 import type { Player } from '@/structures/Player';
 import callEvents from '@/utils/callEvents';
 import type { UncompressedPacket } from '@arthurita/packets';
