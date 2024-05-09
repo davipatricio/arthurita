@@ -34,6 +34,12 @@ export class MCServer extends EventEmitter {
     });
   }
 
+  broadcast(type: 'actionbar' | 'chatbox', message: string) {
+    for (const player of this.players) {
+      player.send(type, message);
+    }
+  }
+
   get players() {
     const players: Player[] = [];
 
