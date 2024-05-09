@@ -1,3 +1,4 @@
+export * from './chatMessage';
 export * from './joinGame';
 export * from './playerAbilities';
 export * from './playerPositionAndLook';
