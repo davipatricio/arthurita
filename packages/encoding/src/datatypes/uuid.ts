@@ -1,7 +1,7 @@
-import { parse as uuidParse, v3 as uuidv3, v4 as uuidv4, stringify as uuidStringify } from 'uuid';
+import { parse as uuidParse, v3 as uuidv3, stringify as uuidStringify } from 'uuid';
 import type { ReadDataType } from './utils';
 
-const namespace = uuidv4();
+const namespace = uuidv3.DNS;
 
 export function readUUID(buffer: Buffer): ReadDataType<string> {
   return { length: 16, value: uuidStringify(buffer.subarray(0, 16)) };

@@ -16,7 +16,11 @@ import {
   writeString,
   writeUnsignedShort,
   writeVarInt,
-  writeVarLong
+  writeVarLong,
+  readOldPosition,
+  writeOldPosition,
+  writeUUID,
+  readUUID
 } from 'dist';
 import { describe, expect, test } from 'vitest';
 
@@ -211,5 +215,30 @@ describe('@arthurita/encoding | read from raw packet', () => {
     expect(serverAddress.value).toBe('very long random string');
     expect(serverPort.value).toBe(25565);
     expect(nextState.value).toBe(1);
+  });
+});
+
+describe('@arthurita/encoding | position', () => {
+  test('encode and decode position', () => {
+    const positionBuffer = writeOldPosition({ x: 0n, y: 0n, z: 0n });
+    const { value: position } = readOldPosition(positionBuffer);
+
+    expect(position).toStrictEqual({ x: 0n, y: 0n, z: 0n });
+  });
+});
+
+describe('@arthurita/encoding | uuid', () => {
+  test('encode and decode uuid', () => {
+    const values = ['Notch', 'OfflinePlayer:Notch', 'davipatricio', 'a'.repeat(40)];
+    const uuids = ['ec153d28-bf79-3358-a77e-c7c4de2934cd', 'dbada1bb-c3b6-3839-a50d-543d675f92fa', '6122d455-6301-3bda-93bb-380fbda108c4', '13c085b8-0e53-35ed-bd46-f814ae2cd6cf'];
+
+    let i = 0;
+    for (const value of values) {
+      const uuidBuffer = writeUUID(value);
+      const { value: uuid } = readUUID(uuidBuffer);
+
+      expect(uuid).toBe(uuids[i]);
+      i++;
+    }
   });
 });
