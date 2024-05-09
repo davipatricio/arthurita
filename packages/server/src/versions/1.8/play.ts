@@ -35,5 +35,8 @@ export function handleKeepAlive(packet: UncompressedPacket, player: Player) {
   if (keepAlivePacket.keepAliveId !== id) {
     player._stopKeepAlive();
     player.socket.destroy();
+    return;
   }
+
+  player._ackKeepAlive();
 }
