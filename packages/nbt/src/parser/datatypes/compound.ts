@@ -1,25 +1,40 @@
-import { parseNBT } from '@/parser';
-import type { CompoundTag } from '@/types/tags';
+import { type AllNBTTag, type CompoundTag, NBTTags } from '@/types/tags';
+import { parseFromTag } from '../internal/parseFromTag';
 import type { ParseReturnOptions } from '../utils';
 
-export function parseNBTCompound(buffer: Buffer, currentOffset: number): ParseReturnOptions & CompoundTag {
+export function parseNBTCompound(buffer: Buffer, currentOffset: number, ignoreNames: boolean): ParseReturnOptions & CompoundTag {
   let offset = currentOffset;
+  let name = null;
 
-  const nameLength = buffer.subarray(offset, offset + 2).readUInt16BE();
-  offset += 2;
+  if (!ignoreNames) {
+    name = '';
 
-  let name = '';
+    const nameLength = buffer.subarray(offset, offset + 2).readUInt16BE();
+    offset += 2;
 
-  if (nameLength > 0) {
-    name = buffer.subarray(offset, offset + nameLength).toString();
-    offset += nameLength;
+    if (nameLength > 0) {
+      name = buffer.subarray(offset, offset + nameLength).toString();
+      offset += nameLength;
+    }
   }
 
-  const tag = parseNBT(buffer, offset);
+  const compoundValues: AllNBTTag[] = [];
+
+  while (true) {
+    const id = buffer.subarray(offset, offset + 1).readUint8();
+    offset += 1;
+
+    if (id === NBTTags.End) break;
+
+    const tag = parseFromTag(buffer, { id, currentOffset: offset });
+    offset = tag.currentOffset;
+
+    compoundValues.push(tag);
+  }
 
   const compound: CompoundTag = {
     name,
-    value: tag,
+    value: compoundValues,
     type: 'compound'
   };
 

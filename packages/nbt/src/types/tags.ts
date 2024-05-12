@@ -29,7 +29,7 @@ export type NBTTagNames =
   | 'longArray';
 
 export interface BaseNBTTag<Name extends NBTTagNames, Value> {
-  name: string;
+  name: string | null;
   type: Name;
   value: Value;
 }
@@ -45,7 +45,7 @@ export type StringTag = BaseNBTTag<'string', string>;
 export type ListTag<T> = BaseNBTTag<'list', T[]>;
 export type IntArrayTag = BaseNBTTag<'intArray', number[]>;
 export type LongArrayTag = BaseNBTTag<'longArray', bigint[]>;
-export type CompoundTag = BaseNBTTag<'compound', AllNBTTag | []>;
+export type CompoundTag = BaseNBTTag<'compound', AllNBTTag[]>;
 
 export type AllNBTTag<T = unknown> =
   | ByteTag

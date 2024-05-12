@@ -1,67 +1,81 @@
 import { type AllNBTTag, NBTTags } from '@/types/tags';
-import { parseNBTByte, parseNBTCompound, parseNBTDouble, parseNBTFloat, parseNBTInt, parseNBTList, parseNBTLong, parseNBTShort, parseNBTString } from '../datatypes';
+import {
+  parseNBTByte,
+  parseNBTByteArray,
+  parseNBTCompound,
+  parseNBTDouble,
+  parseNBTFloat,
+  parseNBTInt,
+  parseNBTIntArray,
+  parseNBTList,
+  parseNBTLong,
+  parseNBTLongArray,
+  parseNBTShort,
+  parseNBTString
+} from '../datatypes';
 import type { ParseReturnOptions } from '../utils';
 
 interface ParseFromTagOptions {
   currentOffset: number;
   id: number;
+  ignoreNames?: boolean;
 }
 
-export function parseFromTag(buffer: Buffer, { id, currentOffset }: ParseFromTagOptions): AllNBTTag & ParseReturnOptions {
+export function parseFromTag(
+  buffer: Buffer,
+  { id, currentOffset, ignoreNames = false }: ParseFromTagOptions
+): AllNBTTag & ParseReturnOptions {
   switch (id) {
-    case NBTTags.End: {
-      break;
-    }
     case NBTTags.Byte: {
-      const data = parseNBTByte(buffer, currentOffset);
+      const data = parseNBTByte(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.Short: {
-      const data = parseNBTShort(buffer, currentOffset);
+      const data = parseNBTShort(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.Int: {
-      const data = parseNBTInt(buffer, currentOffset);
+      const data = parseNBTInt(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.Long: {
-      const data = parseNBTLong(buffer, currentOffset);
+      const data = parseNBTLong(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.Float: {
-      const data = parseNBTFloat(buffer, currentOffset);
+      const data = parseNBTFloat(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.Double: {
-      const data = parseNBTDouble(buffer, currentOffset);
+      const data = parseNBTDouble(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.ByteArray: {
-      throw new Error('Not implemented');
+      const data = parseNBTByteArray(buffer, currentOffset, ignoreNames);
+      return data;
     }
     case NBTTags.String: {
-      const data = parseNBTString(buffer, currentOffset);
+      const data = parseNBTString(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.List: {
-      const data = parseNBTList(buffer, currentOffset);
+      const data = parseNBTList(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.Compound: {
-      const data = parseNBTCompound(buffer, currentOffset);
+      const data = parseNBTCompound(buffer, currentOffset, ignoreNames);
       return data;
     }
     case NBTTags.IntArray: {
-      throw new Error('Not implemented');
+      const data = parseNBTIntArray(buffer, currentOffset, ignoreNames);
+      return data;
     }
     case NBTTags.LongArray: {
-      throw new Error('Not implemented');
+      const data = parseNBTLongArray(buffer, currentOffset, ignoreNames);
+      return data;
     }
     default: {
-      break;
+      throw new Error(`Unknown tag id: ${id}`);
     }
   }
-
-  // @ts-expect-error
-  return { currentOffset };
 }
