@@ -1,5 +1,5 @@
 import { type AllNBTTag, NBTTags } from '@/types/tags';
-import { parseNBTByte, parseNBTCompound, parseNBTInt, parseNBTList, parseNBTShort, parseNBTString } from '../datatypes';
+import { parseNBTByte, parseNBTCompound, parseNBTInt, parseNBTList, parseNBTLong, parseNBTShort, parseNBTString } from '../datatypes';
 import type { ParseReturnOptions } from '../utils';
 
 interface ParseFromTagOptions {
@@ -27,7 +27,8 @@ export function parseFromTag(buffer: Buffer, { id, currentOffset }: ParseFromTag
       return data;
     }
     case NBTTags.Long: {
-      throw new Error('Not implemented');
+      const data = parseNBTLong(buffer, currentOffset);
+      return data;
     }
     case NBTTags.Float: {
       throw new Error('Not implemented');
