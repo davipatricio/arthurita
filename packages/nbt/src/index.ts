@@ -1,1 +1,1 @@
-export * from './structures/nbtTags';
+export * from './parser';

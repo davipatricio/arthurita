@@ -6,5 +6,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "examples/*.js"]
 }
