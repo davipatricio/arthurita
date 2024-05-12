@@ -1,4 +1,4 @@
-import type { ByteTag, ShortTag } from '@/types/tags';
+import type { ShortTag } from '@/types/tags';
 import type { ParseReturnOptions } from '../utils';
 
 export function parseNBTShort(buffer: Buffer, currentOffset: number): ParseReturnOptions & ShortTag {
