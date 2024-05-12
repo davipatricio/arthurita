@@ -1,5 +1,7 @@
 export * from './byte';
 export * from './compound';
+export * from './double';
+export * from './float';
 export * from './int';
 export * from './list';
 export * from './long';
