@@ -2,11 +2,7 @@ import type { AllNBTTag, ListTag } from '@/types/tags';
 import { parseFromTag } from '../internal/parseFromTag';
 import type { ParseReturnOptions } from '../utils';
 
-export function parseNBTList(
-  buffer: Buffer,
-  currentOffset: number,
-  ignoreNames: boolean
-): ParseReturnOptions & ListTag<unknown> {
+export function parseNBTList(buffer: Buffer, currentOffset: number, ignoreNames: boolean): ParseReturnOptions & ListTag<unknown> {
   let offset = currentOffset;
   let name = null;
 
