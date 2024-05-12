@@ -1,81 +1,5 @@
-export enum NBTTags {
-  TAG_End = 0,
-  TAG_Byte = 1,
-  TAG_Short = 2,
-  TAG_Int = 3,
-  TAG_Long = 4,
-  TAG_Float = 5,
-  TAG_Double = 6,
-  TAG_Byte_Array = 7,
-  TAG_String = 8,
-  TAG_List = 9,
-  TAG_Compound = 10,
-  TAG_Int_Array = 11,
-  TAG_Long_Array = 12
-}
-
-type NBTTagNames =
-  | 'byte'
-  | 'short'
-  | 'int'
-  | 'long'
-  | 'float'
-  | 'double'
-  | 'byteArray'
-  | 'string'
-  | 'list'
-  | 'compound'
-  | 'intArray'
-  | 'longArray';
-
-interface BaseNBTTag<Name extends NBTTagNames, Value> {
-  name: string;
-  type: Name;
-  value: Value;
-}
-
-type ByteTag = BaseNBTTag<'byte', number>;
-type ShortTag = BaseNBTTag<'short', number>;
-type IntTag = BaseNBTTag<'int', number>;
-type LongTag = BaseNBTTag<'long', bigint>;
-type FloatTag = BaseNBTTag<'float', number>;
-type DoubleTag = BaseNBTTag<'double', number>;
-type ByteArrayTag = BaseNBTTag<'byteArray', number[]>;
-type StringTag = BaseNBTTag<'string', string>;
-type ListTag<T> = BaseNBTTag<'list', T[]>;
-type IntArrayTag = BaseNBTTag<'intArray', number[]>;
-type LongArrayTag = BaseNBTTag<'longArray', bigint[]>;
-type CompoundTag = BaseNBTTag<'compound', AllNBTTag | []>;
-
-type AllNBTTag<T = unknown> =
-  | ByteTag
-  | ShortTag
-  | IntTag
-  | LongTag
-  | FloatTag
-  | DoubleTag
-  | ByteArrayTag
-  | StringTag
-  | ListTag<T>
-  | IntArrayTag
-  | LongArrayTag
-  | CompoundTag;
-
-// const rootCompound = new Map<string, CompoundTag>();
-
-// rootCompound.set('A', {
-//   name: 'root',
-//   type: 'compound',
-//   value: {
-//     name: 'a',
-//     type: 'compound',
-//     value: {
-//       name: 'b',
-//       type: 'int',
-//       value: 1
-//     }
-//   }
-// });
+import type { AllNBTTag, ByteTag, CompoundTag, ListTag, StringTag } from '@/types/tags';
+import { NBTTags } from '@/types/tags';
 
 interface ParseFromTagOptions {
   currentOffset: number;
@@ -88,29 +12,52 @@ interface ParseReturnOptions {
 
 function _parseFromTag(buffer: Buffer, { id, currentOffset }: ParseFromTagOptions): AllNBTTag & ParseReturnOptions {
   switch (id) {
-    case NBTTags.TAG_End: {
+    case NBTTags.End: {
       // return {};
       console.log('tag end');
       break;
     }
-    case NBTTags.TAG_Compound: {
-      const data = parseNBTCompound(buffer, currentOffset);
-      return data;
-    }
-    case NBTTags.TAG_String: {
-      const data = parseNBTString(buffer, currentOffset);
-      return data;
-    }
-    case NBTTags.TAG_List: {
-      const data = parseNBTList(buffer, currentOffset);
-      return data;
-    }
-    case NBTTags.TAG_Byte: {
+    case NBTTags.Byte: {
       const data = parseNBTByte(buffer, currentOffset);
       return data;
     }
+    case NBTTags.Short: {
+      throw new Error('Not implemented');
+    }
+    case NBTTags.Int: {
+      throw new Error('Not implemented');
+    }
+    case NBTTags.Long: {
+      throw new Error('Not implemented');
+    }
+    case NBTTags.Float: {
+      throw new Error('Not implemented');
+    }
+    case NBTTags.Double: {
+      throw new Error('Not implemented');
+    }
+    case NBTTags.ByteArray: {
+      throw new Error('Not implemented');
+    }
+    case NBTTags.String: {
+      const data = parseNBTString(buffer, currentOffset);
+      return data;
+    }
+    case NBTTags.List: {
+      const data = parseNBTList(buffer, currentOffset);
+      return data;
+    }
+    case NBTTags.Compound: {
+      const data = parseNBTCompound(buffer, currentOffset);
+      return data;
+    }
+    case NBTTags.IntArray: {
+      throw new Error('Not implemented');
+    }
+    case NBTTags.LongArray: {
+      throw new Error('Not implemented');
+    }
     default: {
-      // return {};
       break;
     }
   }
@@ -225,7 +172,7 @@ export function parseNBTList(buffer: Buffer, currentOffset: number): ParseReturn
   console.log('>', buffer.subarray(offset));
 
   const listValues: AllNBTTag[] = [];
-  const isCompound = typeId === NBTTags.TAG_Compound;
+  const isCompound = typeId === NBTTags.Compound;
 
   if (isCompound) {
     listValues.push({
