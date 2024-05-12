@@ -27,52 +27,40 @@ export function parseFromTag(
 ): AllNBTTag & ParseReturnOptions {
   switch (id) {
     case NBTTags.Byte: {
-      const data = parseNBTByte(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTByte(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.Short: {
-      const data = parseNBTShort(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTShort(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.Int: {
-      const data = parseNBTInt(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTInt(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.Long: {
-      const data = parseNBTLong(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTLong(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.Float: {
-      const data = parseNBTFloat(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTFloat(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.Double: {
-      const data = parseNBTDouble(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTDouble(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.ByteArray: {
-      const data = parseNBTByteArray(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTByteArray(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.String: {
-      const data = parseNBTString(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTString(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.List: {
-      const data = parseNBTList(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTList(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.Compound: {
-      const data = parseNBTCompound(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTCompound(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.IntArray: {
-      const data = parseNBTIntArray(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTIntArray(buffer, currentOffset, ignoreNames);
     }
     case NBTTags.LongArray: {
-      const data = parseNBTLongArray(buffer, currentOffset, ignoreNames);
-      return data;
+      return parseNBTLongArray(buffer, currentOffset, ignoreNames);
     }
     default: {
       throw new Error(`Unknown tag id: ${id}`);
