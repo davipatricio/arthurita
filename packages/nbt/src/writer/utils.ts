@@ -1,6 +1,6 @@
-import { type NBTTagNames, NBTTags } from '@/types/tags';
 import { promisify } from 'node:util';
 import zlib from 'node:zlib';
+import { type NBTTagNames, NBTTags } from '@/types/tags';
 
 const gzipAsync = promisify(zlib.gzip);
 

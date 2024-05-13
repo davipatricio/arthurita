@@ -1,6 +1,6 @@
 import { type DoubleTag, NBTTags } from '@/types/tags';
 
-export function writeNBTDouble(data: DoubleTag) {
+export function writeNBTDouble(data: Omit<DoubleTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
 
   const name = data.name;

@@ -6,13 +6,14 @@ import {
   writeNBTFloat,
   writeNBTInt,
   writeNBTIntArray,
+  writeNBTList,
   writeNBTLong,
   writeNBTLongArray,
   writeNBTShort,
   writeNBTString
 } from '.';
 
-export function writeNBTCompound(data: CompoundTag) {
+export function writeNBTCompound(data: Omit<CompoundTag, 'type'>) {
   const nameLength = data.name ? data.name.length : 0;
 
   const name = data.name;
@@ -72,7 +73,9 @@ export function writeNBTCompound(data: CompoundTag) {
         break;
       }
       case 'list': {
-        throw new Error('List tags are not supported currently');
+        const listBuffer = writeNBTList(tag);
+        buffer = Buffer.from([...buffer, ...listBuffer]);
+        break;
       }
       case 'long': {
         const longBuffer = writeNBTLong(tag);

@@ -1,6 +1,6 @@
 import { type LongTag, NBTTags } from '@/types/tags';
 
-export function writeNBTLong(data: LongTag) {
+export function writeNBTLong(data: Omit<LongTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
 
   const name = data.name;

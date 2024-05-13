@@ -1,6 +1,6 @@
-import { type ShortTag, NBTTags } from '@/types/tags';
+import { NBTTags, type ShortTag } from '@/types/tags';
 
-export function writeNBTShort(data: ShortTag) {
+export function writeNBTShort(data: Omit<ShortTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
 
   const name = data.name;

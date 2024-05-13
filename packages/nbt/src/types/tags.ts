@@ -29,9 +29,19 @@ export type NBTTagNames =
   | 'longArray';
 
 export interface BaseNBTTag<Name extends NBTTagNames, Value> {
-  name: string | null;
+  name?: string | null;
   type: Name;
   value: Value;
+}
+
+interface ListTagContent {
+  name?: string | null;
+  type: 'list';
+  value: {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    value: any;
+  }[];
+  typeId: NBTTags;
 }
 
 export type ByteTag = BaseNBTTag<'byte', number>;
@@ -42,12 +52,12 @@ export type FloatTag = BaseNBTTag<'float', number>;
 export type DoubleTag = BaseNBTTag<'double', number>;
 export type ByteArrayTag = BaseNBTTag<'byteArray', number[]>;
 export type StringTag = BaseNBTTag<'string', string>;
-export type ListTag<T> = BaseNBTTag<'list', T[]>;
+export type ListTag = ListTagContent;
 export type IntArrayTag = BaseNBTTag<'intArray', number[]>;
 export type LongArrayTag = BaseNBTTag<'longArray', bigint[]>;
 export type CompoundTag = BaseNBTTag<'compound', AllNBTTag[]>;
 
-export type AllNBTTag<T = unknown> =
+export type AllNBTTag =
   | ByteTag
   | ShortTag
   | IntTag
@@ -56,7 +66,7 @@ export type AllNBTTag<T = unknown> =
   | DoubleTag
   | ByteArrayTag
   | StringTag
-  | ListTag<T>
+  | ListTag
   | IntArrayTag
   | LongArrayTag
   | CompoundTag;

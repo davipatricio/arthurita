@@ -1,6 +1,6 @@
 import { type FloatTag, NBTTags } from '@/types/tags';
 
-export function writeNBTFloat(data: FloatTag) {
+export function writeNBTFloat(data: Omit<FloatTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
 
   const name = data.name;

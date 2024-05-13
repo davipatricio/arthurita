@@ -1,6 +1,6 @@
 import { NBTTags, type StringTag } from '@/types/tags';
 
-export function writeNBTString(data: StringTag) {
+export function writeNBTString(data: Omit<StringTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
   const valueLength = Buffer.byteLength(data.value);
 

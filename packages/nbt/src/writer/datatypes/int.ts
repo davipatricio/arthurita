@@ -1,6 +1,6 @@
 import { type IntTag, NBTTags } from '@/types/tags';
 
-export function writeNBTInt(data: IntTag) {
+export function writeNBTInt(data: Omit<IntTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
 
   const name = data.name;

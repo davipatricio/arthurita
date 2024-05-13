@@ -1,6 +1,6 @@
 import { type ByteTag, NBTTags } from '@/types/tags';
 
-export function writeNBTByte(data: ByteTag) {
+export function writeNBTByte(data: Omit<ByteTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
 
   const name = data.name;

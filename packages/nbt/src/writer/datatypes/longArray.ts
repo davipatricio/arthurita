@@ -1,6 +1,6 @@
 import { type LongArrayTag, NBTTags } from '@/types/tags';
 
-export function writeNBTLongArray(data: LongArrayTag) {
+export function writeNBTLongArray(data: Omit<LongArrayTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
 
   const name = data.name;
@@ -25,9 +25,8 @@ export function writeNBTLongArray(data: LongArrayTag) {
 
   for (const value of items) {
     buffer.writeBigInt64BE(value, offset);
-    offset += 8
+    offset += 8;
   }
-
 
   return buffer;
 }

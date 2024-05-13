@@ -1,6 +1,6 @@
 import { type IntArrayTag, NBTTags } from '@/types/tags';
 
-export function writeNBTIntArray(data: IntArrayTag) {
+export function writeNBTIntArray(data: Omit<IntArrayTag, 'type'>) {
   const nameLength = data.name ? Buffer.byteLength(data.name) : 0;
 
   const name = data.name;
@@ -24,7 +24,7 @@ export function writeNBTIntArray(data: IntArrayTag) {
 
   for (const value of items) {
     buffer.writeInt32BE(value, offset);
-    offset += 4
+    offset += 4;
   }
 
   return buffer;
