@@ -48,6 +48,8 @@ export class Player {
   }
 
   _startKeepAlive() {
+    this.keepAliveAck = true;
+
     this.keepAliveInterval = setInterval(() => {
       if (this.socket.destroyed) {
         clearInterval(this.keepAliveInterval);
