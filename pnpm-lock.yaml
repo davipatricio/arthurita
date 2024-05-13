@@ -50,10 +50,6 @@ importers:
         version: 1.6.0(@types/node@20.12.8)
 
   packages/nbt:
-    dependencies:
-      '@arthurita/encoding':
-        specifier: workspace:^
-        version: link:../encoding
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.7.2
