@@ -4,6 +4,8 @@ import { UncompressedPacket } from '@arthurita/packets';
 import handleIncomingPacket from '@/versions/packetHandler';
 import EventEmitter from 'node:events';
 import type { MCServerEvents } from '@/types/events';
+import callEvents from '@/utils/callEvents';
+import { PlayerQuitEvent } from '@/events';
 
 interface MCServerOptions {
   port: number;
@@ -63,6 +65,11 @@ export class MCServer extends EventEmitter {
       socket.on('close', () => {
         this._rawPlayers.delete(player.name);
         player.socket.destroy();
+
+        if (player.state === PlayerState.Play) {
+          const event = new PlayerQuitEvent(player);
+          callEvents(this, 'playerQuit', event);
+        }
       });
     });
   }
