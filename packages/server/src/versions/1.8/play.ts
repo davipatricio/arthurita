@@ -22,7 +22,7 @@ export function handleClientSettings(packet: UncompressedPacket, player: Player)
     pitch: 0,
     flags: 0
   });
-  player._sendPacket(playerPositionPacket);
+  player.sendPacket(playerPositionPacket);
 
   const event = new PlayerJoinEvent(player);
   callEvents(player.server, 'playerJoin', event);
@@ -30,13 +30,13 @@ export function handleClientSettings(packet: UncompressedPacket, player: Player)
 
 export function handleKeepAlive(packet: UncompressedPacket, player: Player) {
   const keepAlivePacket = new packets.PlayServerboundKeepAlivePacket(packet.data);
-  const id = player._getStoredKeepAliveId();
+  const id = player._heartbeater.sequence;
 
   if (keepAlivePacket.keepAliveId !== id) {
-    player._stopKeepAlive();
+    player._heartbeater.stop();
     player.socket.destroy();
     return;
   }
 
-  player._ackKeepAlive();
+  player._heartbeater.ack();
 }

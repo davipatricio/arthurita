@@ -11,13 +11,13 @@ export function handleStatusRequest(_packet: UncompressedPacket, player: Player)
   callEvents(player.server, 'serverListPing', event);
 
   const packet = new packets.StatusClientboundStatusResponsePacket(event.data);
-  player._sendPacket(packet);
+  player.sendPacket(packet);
 }
 
 export function handlePingRequest(incomingPacket: UncompressedPacket, player: Player) {
   const { payload } = new packets.StatusServerboundPingRequestPacket(incomingPacket.data);
   const packet = new packets.StatusClientboundPingResponsePacket(payload);
 
-  player._sendPacket(packet);
+  player.sendPacket(packet);
   player.socket.destroy();
 }

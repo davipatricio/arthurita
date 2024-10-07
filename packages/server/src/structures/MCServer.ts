@@ -1,11 +1,11 @@
 import EventEmitter from 'node:events';
 import { Server } from 'node:net';
-import { UncompressedPacket } from '@arthurita/packets';
 import { PlayerQuitEvent } from '@/events/PlayerQuitEvent';
 import type { MCServerEvents } from '@/types/events';
-import handleIncomingPacket from '@/versions/packetHandler';
-import { Player, PlayerState } from './Player';
 import callEvents from '@/utils/callEvents';
+import handleIncomingPacket from '@/versions/packetHandler';
+import { UncompressedPacket } from '@arthurita/packets';
+import { Player, PlayerState } from './Player';
 
 interface MCServerOptions {
   port: number;
