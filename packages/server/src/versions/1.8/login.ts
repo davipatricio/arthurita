@@ -8,7 +8,6 @@ const packets = getVersionPackets(47);
 // https://wiki.vg/index.php?title=Protocol_FAQ&oldid=8076
 export function handleLoginStart(packet: UncompressedPacket, player: Player) {
   const loginPacket = new packets.LoginServerboundLoginStartPacket(packet.data);
-
   player.name = loginPacket.playerName;
   player.state = PlayerState.Play;
 

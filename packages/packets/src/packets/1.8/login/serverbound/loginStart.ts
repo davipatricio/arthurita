@@ -1,6 +1,5 @@
 import { UncompressedPacket } from '@/structures';
 import type { ServerboundPacket } from '@/typings';
-import { readString } from '@arthurita/encoding';
 
 export class LoginServerboundLoginStartPacket extends UncompressedPacket implements ServerboundPacket {
   public playerName: string;
@@ -20,6 +19,6 @@ export class LoginServerboundLoginStartPacket extends UncompressedPacket impleme
 
   _decode() {
     // Apparently the player name is not prefixed by a length on 1.8.9
-    this.playerName = readString(this.data).value;
+    this.playerName = this.data.toString('utf-8');
   }
 }
