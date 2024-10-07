@@ -9,9 +9,9 @@ export class StatusServerboundHandshakePacket extends UncompressedPacket impleme
   public nextState: number;
 
   constructor(data: Buffer) {
-    super();
+    super(data);
 
-    this.setID(0x00).setData(data)._decode();
+    this.setID(0x00)._decode();
   }
 
   toJSON() {

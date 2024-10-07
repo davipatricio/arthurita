@@ -1,8 +1,8 @@
-import { type UncompressedPacket, type PlayerSettingsChatMode, getVersionPackets } from '@arthurita/packets';
 import { randomBytes } from 'node:crypto';
 import type { Socket } from 'node:net';
-import type { MCServer } from './MCServer';
 import { writeVarInt } from '@arthurita/encoding';
+import { type PlayerSettingsChatMode, type UncompressedPacket, getVersionPackets } from '@arthurita/packets';
+import type { MCServer } from './MCServer';
 
 export enum PlayerState {
   Handshaking = 0,
@@ -25,7 +25,7 @@ export class Player {
 
   // Internal usage
   private keepAliveId: number;
-  private keepAliveInterval: NodeJS.Timeout;
+  private keepAliveInterval: Timer;
   private keepAliveAck: boolean;
 
   constructor(

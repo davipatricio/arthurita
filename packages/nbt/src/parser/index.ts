@@ -1,4 +1,4 @@
-import { parseFromTag } from '@/parser/internal/parseFromTag';
+import { parseFromTag } from './internal/parseFromTag';
 import { decompressNBT, isNBTCompressed } from './utils';
 
 /**

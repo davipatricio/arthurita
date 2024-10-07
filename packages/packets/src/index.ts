@@ -1,4 +1,7 @@
-import * as v1_8_packets from './versions/1.8';
+import * as v1_8_packets from '@/versions/1.8';
+
+export * from '@/typings';
+export * from '@/structures';
 
 export function getVersionPackets(protocol: number) {
   switch (protocol) {
@@ -8,6 +11,3 @@ export function getVersionPackets(protocol: number) {
 
   throw new Error(`Unknown protocol version: ${protocol}`);
 }
-
-export * from './typings';
-export * from './structures';

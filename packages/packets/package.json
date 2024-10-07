@@ -4,11 +4,13 @@
   "description": "",
   "type": "module",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup",
+    "build:declarations": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build:files": "bun build src/index.ts --outdir dist --target node --packages external",
+    "build": "bun run build:declarations && bun run build:files",
     "lint": "biome check .",
-    "format": "biome check --apply-unsafe .",
+    "format": "biome check --write --unsafe .",
     "test": "vitest run"
   },
   "repository": {
@@ -28,8 +30,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@types/node": "^22.5.2",
-    "tsup": "^8.2.4",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
   }

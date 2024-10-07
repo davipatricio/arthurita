@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { compressNBT, parseNBT, writeNBTCompound } from '../dist/index.js';
+import { compressNBT, parseNBT, writeNBTCompound } from '../dist';
 
 const file = await readFile('./examples/hello-world.nbt');
 // const data = await parseNBT(file);

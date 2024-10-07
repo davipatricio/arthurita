@@ -1,1 +1,1 @@
-export * from './structures';
+export * from '@/structures';

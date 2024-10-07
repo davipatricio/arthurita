@@ -2,11 +2,8 @@ import { readVarInt, writeVarInt } from '@arthurita/encoding';
 
 export class UncompressedPacket {
   public id = 0;
-  public data = Buffer.from([]);
 
-  constructor() {
-    return;
-  }
+  constructor(public data = Buffer.from([])) {}
 
   setID(id: number) {
     this.id = id;
@@ -21,17 +18,13 @@ export class UncompressedPacket {
   toBuffer() {
     const _packetId = writeVarInt(this.id);
 
-    return Buffer.concat([
-      this.lengthBuffer,
-      _packetId,
-      this.data
-    ]);
+    return Buffer.concat([this.lengthBuffer, _packetId, this.data]);
   }
 
   get length() {
     const _packetId = writeVarInt(this.id);
     const _packetLength = writeVarInt(_packetId.length + this.data.length);
-    return readVarInt(_packetLength).value
+    return readVarInt(_packetLength).value;
   }
 
   get lengthBuffer() {

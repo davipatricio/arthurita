@@ -1,7 +1,7 @@
-import type { Player } from '@/structures/Player';
 import type { UncompressedPacket } from '@arthurita/packets';
-import { packetHandler as unknown_version_packetHandler } from './unknown/packetHandler';
+import type { Player } from '@/structures';
 import { packetHandler as v1_8_packetHandler } from './1.8/packetHandler';
+import { packetHandler as unknown_version_packetHandler } from './unknown/packetHandler';
 
 export default function handleIncomingPacket(packet: UncompressedPacket, player: Player) {
   switch (player.version) {

@@ -1,4 +1,4 @@
-import { parse as uuidParse, v3 as uuidv3, stringify as uuidStringify } from 'uuid';
+import { parse as uuidParse, stringify as uuidStringify, v3 as uuidv3 } from 'uuid';
 import type { ReadDataType } from './utils';
 
 const namespace = uuidv3.DNS;

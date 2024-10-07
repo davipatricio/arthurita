@@ -1,4 +1,4 @@
-import type { MCServer } from '@/structures/MCServer';
+import type { MCServer } from '@/structures';
 import type { MCServerEvents } from '@/types/events';
 
 /**

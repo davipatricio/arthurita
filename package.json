@@ -4,21 +4,19 @@
   "private": true,
   "description": "",
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "turbo run format",
-    "test": "turbo run test",
+    "build": "bun run --filter '*' build",
+    "lint": "bun run --filter '*' lint",
+    "format": "bun run --filter '*' format",
+    "test": "bun run --filter '*' test",
     "prepare": "husky"
   },
   "author": "Davi Patricio <davipatricio@pm.me>",
   "license": "MIT",
-  "packageManager": "pnpm@9.1.0-0+sha256.c557b24d2298d9b5e3be7086ebf55a28253b008324d545f72645a6de89844102",
+  "workspaces": ["packages/*"],
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
-    "husky": "^9.1.5",
-    "tsup": "^8.2.4",
-    "turbo": "^2.1.1",
-    "typescript": "^5.5.4"
+    "@biomejs/biome": "^1.9.3",
+    "@types/bun": "^1.1.10",
+    "husky": "^9.1.6",
+    "typescript": "^5.6.2"
   }
 }

@@ -1,4 +1,4 @@
-import type { Player } from '@/structures/Player';
+import type { Player } from '@/structures';
 import { type UncompressedPacket, getVersionPackets } from '@arthurita/packets';
 
 export function handleHandshake(packet: UncompressedPacket, player: Player) {

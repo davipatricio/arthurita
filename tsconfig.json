@@ -7,8 +7,9 @@
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "remove",
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "target": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2023",
+    "outDir": "dist",
     // Strict Type-Checking Options
     "strict": true,
     "strictFunctionTypes": true,
@@ -21,16 +22,13 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    // Building
+    "declaration": true,
+    "emitDeclarationOnly": true,
     // Miscellaneous Options
     "alwaysStrict": true,
-    "declaration": false,
-    "isolatedModules": true,
-    "noEmit": true,
     "removeComments": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
-  },
-  "include": [
-    "*.ts"
-  ]
+  }
 }

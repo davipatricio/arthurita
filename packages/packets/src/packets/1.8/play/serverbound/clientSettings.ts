@@ -10,9 +10,9 @@ export class PlayServerboundClientSettingsPacket extends UncompressedPacket impl
   public displayedSkinParts: number;
 
   constructor(data: Buffer) {
-    super();
+    super(data);
 
-    this.setID(0x15).setData(data)._decode();
+    this.setID(0x15)._decode();
   }
 
   toJSON() {

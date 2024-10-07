@@ -1,6 +1,5 @@
-import type { MCServer } from '@/structures/MCServer';
 import type { StatusResponsePayload } from '@arthurita/packets';
-import type { Player } from '..';
+import type { MCServer, Player } from '..';
 
 export class ServerListPingEvent {
   public readonly data: StatusResponsePayload;

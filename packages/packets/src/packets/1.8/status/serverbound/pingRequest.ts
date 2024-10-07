@@ -6,9 +6,9 @@ export class StatusServerboundPingRequestPacket extends UncompressedPacket imple
   public payload: bigint;
 
   constructor(data: Buffer) {
-    super();
+    super(data);
 
-    this.setID(0x01).setData(data)._decode();
+    this.setID(0x01)._decode();
   }
 
   toJSON() {

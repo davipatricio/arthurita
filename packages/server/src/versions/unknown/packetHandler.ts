@@ -1,4 +1,4 @@
-import { PlayerState, type Player } from '@/structures/Player';
+import { type Player, PlayerState } from '@/structures/Player';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { handleHandshake } from './handshake';
 

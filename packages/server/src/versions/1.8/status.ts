@@ -1,5 +1,5 @@
 import { ServerListPingEvent } from '@/events';
-import type { Player } from '@/structures/Player';
+import type { Player } from '@/structures';
 import callEvents from '@/utils/callEvents';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { getVersionPackets } from '@arthurita/packets';

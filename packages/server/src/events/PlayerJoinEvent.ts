@@ -1,5 +1,4 @@
-import type { MCServer } from '@/structures/MCServer';
-import type { Player } from '..';
+import type { MCServer, Player } from '@/structures';
 
 export class PlayerJoinEvent {
   public readonly server: MCServer;

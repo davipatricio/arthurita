@@ -5,10 +5,11 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup",
+    "build:declarations": "tsc -p tsconfig.build.json",
+    "build:files": "bun build src/index.ts --outdir dist --target node --packages external",
+    "build": "bun run build:declarations && bun run build:files",
     "lint": "biome check .",
-    "format": "biome check --apply-unsafe .",
+    "format": "biome check --write --unsafe .",
     "test": "vitest run"
   },
   "repository": {

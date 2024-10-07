@@ -1,9 +1,12 @@
-import { PlayerState, type Player } from '@/structures/Player';
+import { type Player, PlayerState } from '@/structures';
 import { writeString } from '@arthurita/encoding';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { ServerDifficulty, getVersionPackets } from '@arthurita/packets';
 
 const packets = getVersionPackets(47);
+
+const brandPacket = new packets.PlayClientboundPluginMessagePacket('MC|Brand', writeString('arthurita'));
+console.log(brandPacket);
 
 // https://wiki.vg/index.php?title=Protocol_FAQ&oldid=8076
 export function handleLoginStart(packet: UncompressedPacket, player: Player) {

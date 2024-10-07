@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
   "organizeImports": {
     "enabled": true
   },
@@ -13,12 +13,13 @@
     "lineWidth": 140,
     "lineEnding": "lf",
     "indentWidth": 2,
-    "indentStyle": "space"
+    "indentStyle": "space",
+    "formatWithErrors": true
   },
   "javascript": {
     "formatter": {
       "semicolons": "always",
-      "trailingComma": "none",
+      "trailingCommas": "none",
       "quoteStyle": "single",
       "quoteProperties": "asNeeded"
     }

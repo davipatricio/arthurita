@@ -4,10 +4,11 @@
   "description": "Zero-dependency Minecraft NBT parser.",
   "type": "module",
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup",
+    "build:declarations": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build:files": "bun build src/index.ts --outdir dist --target node --packages external",
+    "build": "bun run build:declarations && bun run build:files",
     "lint": "biome check .",
-    "format": "biome check --apply-unsafe .",
+    "format": "biome check --write --unsafe .",
     "test": "vitest run"
   },
   "repository": {
@@ -24,9 +25,10 @@
   "packageManager": "pnpm@9.1.0-0+sha256.c557b24d2298d9b5e3be7086ebf55a28253b008324d545f72645a6de89844102",
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@types/node": "^22.5.2",
-    "tsup": "^8.2.4",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
+  },
+  "dependencies": {
+    "tsc-alias": "^1.8.10"
   }
 }

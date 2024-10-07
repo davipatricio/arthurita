@@ -1,4 +1,4 @@
-import { PlayerState, type Player } from '@/structures/Player';
+import { type Player, PlayerState } from '@/structures/Player';
 import type { UncompressedPacket } from '@arthurita/packets';
 import { handleLoginStart } from './login';
 import { handleClientSettings, handleKeepAlive } from './play';
@@ -40,6 +40,12 @@ function handleStatusPackets(packet: UncompressedPacket, player: Player) {
     case 0x01:
       handlePingRequest(packet, player);
       break;
+    default: {
+      if (player.server.options.debugUnsupportedPackets) {
+        console.log(`Player sent an unsupported packet. State: status | Packet Id ${packet.id}`);
+      }
+      break;
+    }
   }
 }
 
@@ -48,6 +54,12 @@ function handleLoginPackets(packet: UncompressedPacket, player: Player) {
     case 0x00:
       handleLoginStart(packet, player);
       break;
+    default: {
+      if (player.server.options.debugUnsupportedPackets) {
+        console.log(`Player sent an unsupported packet. State: login | Packet Id ${packet.id}`);
+      }
+      break;
+    }
   }
 }
 
@@ -68,8 +80,11 @@ function handlePlayPackets(packet: UncompressedPacket, player: Player) {
     case 0x06:
       // TODO: Player Position And Look
       break;
-    default:
-      // console.log('Unsupported packet id', packet.id);
+    default: {
+      if (player.server.options.debugUnsupportedPackets) {
+        console.log(`Player sent an unsupported packet. State: play | Packet Id ${packet.id}`);
+      }
       break;
+    }
   }
 }

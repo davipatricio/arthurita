@@ -8,9 +8,9 @@ export class PlayServerboundPluginMessagePacket extends UncompressedPacket imple
   public payload: Buffer;
 
   constructor(data: Buffer) {
-    super();
+    super(data);
 
-    this.setID(0x17).setData(data)._decode();
+    this.setID(0x17)._decode();
   }
 
   toJSON() {
