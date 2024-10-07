@@ -1,6 +1,6 @@
 import { MCServer } from '@/structures';
 
-const server = new MCServer({ port: 25565, debugUnsupportedPackets: true });
+const server = new MCServer({ port: 25565, debugUnsupportedPackets: false });
 await server.start();
 
 console.log('[Minecraft Server] Listening on tcp/25565.');
@@ -15,6 +15,6 @@ server.on('playerJoin', (event) => {
 });
 
 server.on('playerQuit', (event) => {
-  console.log(`[Minecraft Server] ${event.player.name} joined the server!`);
+  console.log(`[Minecraft Server] ${event.player.name} left the server!`);
   server.broadcast('chatbox', `§e${event.player.name} left the server.`);
 });
