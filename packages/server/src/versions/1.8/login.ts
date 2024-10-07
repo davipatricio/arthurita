@@ -5,9 +5,6 @@ import { ServerDifficulty, getVersionPackets } from '@arthurita/packets';
 
 const packets = getVersionPackets(47);
 
-const brandPacket = new packets.PlayClientboundPluginMessagePacket('MC|Brand', writeString('arthurita'));
-console.log(brandPacket);
-
 // https://wiki.vg/index.php?title=Protocol_FAQ&oldid=8076
 export function handleLoginStart(packet: UncompressedPacket, player: Player) {
   const loginPacket = new packets.LoginServerboundLoginStartPacket(packet.data);
