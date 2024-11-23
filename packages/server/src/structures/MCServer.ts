@@ -1,93 +1,61 @@
-import EventEmitter from 'node:events';
 import { Server } from 'node:net';
-import { PlayerQuitEvent } from '@/events/PlayerQuitEvent';
-import type { MCServerEvents } from '@/types/events';
-import callEvents from '@/utils/callEvents';
-import handleIncomingPacket from '@/versions/packetHandler';
-import { UncompressedPacket } from '@arthurita/packets';
-import { Player, PlayerState } from './Player';
+import { handleIncomingPacket } from '@/utils/packets/handle-incoming-packet';
+import { Packet } from '@arthurita/packets';
+import { Player } from './Player';
 
 interface MCServerOptions {
+  debug: boolean;
+  host: string;
   port: number;
-  debugUnsupportedPackets?: boolean;
+  maxPlayers: number;
+  // whether to allow malformed names (allowed: A-Z, a-z, _, 0-9) (default: false)
+  allowMalformedNames: boolean;
+  serverList: {
+    versionName: string;
+    motd: string;
+  };
 }
 
-export class MCServer extends EventEmitter {
-  public options: MCServerOptions;
-  private netServer: Server;
+const defaultOptions: MCServerOptions = {
+  debug: false,
+  host: '0.0.0.0',
+  port: 25565,
+  maxPlayers: 20,
+  allowMalformedNames: false,
+  serverList: {
+    versionName: '1.21.3',
+    motd: 'A Minecraft Server'
+  }
+};
 
-  /**
-   * Don't use this directly. Use `server.players` to get all connected players
-   */
-  public _rawPlayers: Map<string, Player> = new Map();
+export class MCServer {
+  private readonly netServer: Server;
+  public options: MCServerOptions;
 
   constructor(options?: Partial<MCServerOptions>) {
-    super();
-
-    this.options = Object.assign({ port: 25565 }, options);
+    this.options = { ...defaultOptions, ...options };
+    this.netServer = new Server({ noDelay: true });
   }
 
   async start() {
     return new Promise<void>((resolve) => {
-      this.netServer = new Server({ noDelay: true });
-      this.netServer.listen(this.options.port, () => {
-        this.setupListeners();
+      this.netServer.listen({ host: this.options.host, port: this.options.port }, () => {
+        if (this.options.debug) console.log(`Server listening on ${this.options.host}:${this.options.port}`);
+        this.startHandleConnections();
         resolve();
       });
     });
   }
 
-  broadcast(type: 'actionbar' | 'chatbox', message: string) {
-    for (const player of this.players) {
-      player.send(type, message);
-    }
-  }
-
-  get players() {
-    const players: Player[] = [];
-
-    for (const player of this._rawPlayers.values()) {
-      if (player.state === PlayerState.Play) players.push(player);
-    }
-
-    return players;
-  }
-
-  private setupListeners() {
+  private startHandleConnections() {
     this.netServer.on('connection', (socket) => {
-      const player = new Player(socket, this);
-      this._rawPlayers.set(player.name, player);
+      const player = new Player(socket);
 
       socket.on('data', (data) => {
-        const packets = UncompressedPacket.fromBuffer(data);
-        for (const packet of packets) handleIncomingPacket(packet, player);
-      });
+        const packets = Packet.from(data);
 
-      socket.on('close', () => {
-        this._rawPlayers.delete(player.name);
-        player.socket.destroy();
-
-        if (player.state === PlayerState.Play) {
-          const event = new PlayerQuitEvent(player);
-          callEvents(this, 'playerQuit', event);
-        }
+        for (const packet of packets) handleIncomingPacket({ player, packet });
       });
     });
-  }
-
-  public on<T extends keyof MCServerEvents>(event: T, listener: MCServerEvents[T]): this {
-    return super.on(event, listener);
-  }
-
-  public once<T extends keyof MCServerEvents>(event: T, listener: MCServerEvents[T]): this {
-    return super.once(event, listener);
-  }
-
-  public off<T extends keyof MCServerEvents>(event: T, listener: MCServerEvents[T]): this {
-    return super.off(event, listener);
-  }
-
-  public emit<T extends keyof MCServerEvents>(event: T, ...args: Parameters<MCServerEvents[T]>): boolean {
-    return super.emit(event, ...args);
   }
 }

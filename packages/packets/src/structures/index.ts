@@ -1,1 +1,1 @@
-export * from './UncompressedPacket';
+export * from './Packet';
