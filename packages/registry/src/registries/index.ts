@@ -1,20 +1,14 @@
-import type { WritableNBT } from '@arthurita/nbt';
-import {
-  ArmorTrimMaterial,
-  ArmorTrimPattern,
-  Biome,
-  ChatType,
-  DamageType,
-  DimensionType,
-  PaintingVariant,
-  WolfVariant
-} from '../../registry-types';
-import { BannerPattern } from '../../registry-types/banner-pattern';
+import type { CachedEntries } from '../types';
 
-export type CachedEntries = {
-  entryId: string;
-  data: WritableNBT;
-}[];
+import { BannerPattern } from './banner-pattern';
+import { Biome } from './biome';
+import { DimensionType } from './dimension-type';
+import { DamageType } from './damage-type';
+import { WolfVariant } from './wolf-variant';
+import { PaintingVariant } from './painting-variant';
+import { ArmorTrimPattern } from './armor-trim-pattern';
+import { ArmorTrimMaterial } from './armor-trim-material';
+import { ChatType } from './chat-type';
 
 type AllRegistryIds =
   | typeof Biome.Identifier

@@ -1,6 +1,6 @@
 import { NBTTagType, WritableNBT, type AllNBTTags } from '@arthurita/nbt';
 import dimensionTypeRegistry from '#assets/dimension-types.json';
-import type { CachedEntries } from '../registries/1.20.3-incomplete';
+import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
 

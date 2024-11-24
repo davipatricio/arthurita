@@ -1,5 +1,5 @@
 import { NBTTagType, WritableNBT, type AllNBTTags } from '@arthurita/nbt';
-import type { CachedEntries } from '../registries/1.20.3-incomplete';
+import type { CachedEntries } from '../types';
 import armorTrimPatternRegistry from '#assets/armor-trim-pattern.json';
 
 let cached: CachedEntries | null = null;

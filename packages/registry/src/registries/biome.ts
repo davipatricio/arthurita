@@ -1,6 +1,6 @@
 import { NBTTagType, WritableNBT, type AllNBTTags, type NBTTagCompound } from '@arthurita/nbt';
 import biomesRegistry from '#assets/biomes.json';
-import type { CachedEntries } from '../registries/1.20.3-incomplete';
+import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
 
