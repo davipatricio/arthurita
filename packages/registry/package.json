@@ -15,6 +15,9 @@
     "url": "https://github.com/davipatricio/arthurita.git",
     "directory": "packages/registry"
   },
+  "imports": {
+    "#assets/*": "./src/assets/*"
+  },
   "dependencies": {
     "@arthurita/nbt": "workspace:*"
   },

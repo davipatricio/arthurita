@@ -1,33 +1,72 @@
-import type { NBT, ReadableNBT, WritableNBT } from '@arthurita/nbt';
-import { BiomeIdentifier, DimensionTypeIdentifier, PaintingVariantIdentifier, WolfVariantIdentifier } from '../../registry-types';
-import { dimensions } from './dimension-types';
-import { paintings } from './painting-variant';
-import { wolfVariants } from './wolf-variant';
-import { biomes } from './biomes';
+import type { WritableNBT } from '@arthurita/nbt';
+import {
+  ArmorTrimMaterial,
+  ArmorTrimPattern,
+  Biome,
+  ChatType,
+  DamageType,
+  DimensionType,
+  PaintingVariant,
+  WolfVariant
+} from '../../registry-types';
+import { BannerPattern } from '../../registry-types/banner-pattern';
+
+export type CachedEntries = {
+  entryId: string;
+  data: WritableNBT;
+}[];
+
+type AllRegistryIds =
+  | typeof Biome.Identifier
+  | typeof DimensionType.Identifier
+  | typeof DamageType.Identifier
+  | typeof WolfVariant.Identifier
+  | typeof PaintingVariant.Identifier
+  | typeof BannerPattern.Identifier
+  | typeof ArmorTrimPattern.Identifier
+  | typeof ArmorTrimMaterial.Identifier
+  | typeof ChatType.Identifier;
 
 interface CachedRegistry {
-  registryId: `minecraft:${string}`;
-  entries: {
-    entryId: string;
-    data?: WritableNBT | ReadableNBT | NBT;
-  }[];
+  registryId: AllRegistryIds;
+  entries: CachedEntries;
 }
 
 export const cachedRegistries: CachedRegistry[] = [
   {
-    registryId: DimensionTypeIdentifier,
-    entries: dimensions
+    registryId: Biome.Identifier,
+    entries: Biome.entries()
   },
   {
-    registryId: PaintingVariantIdentifier,
-    entries: paintings
+    registryId: DimensionType.Identifier,
+    entries: DimensionType.entries()
   },
   {
-    registryId: WolfVariantIdentifier,
-    entries: wolfVariants
+    registryId: DamageType.Identifier,
+    entries: DamageType.entries()
   },
   {
-    registryId: BiomeIdentifier,
-    entries: biomes
+    registryId: WolfVariant.Identifier,
+    entries: WolfVariant.entries()
+  },
+  {
+    registryId: PaintingVariant.Identifier,
+    entries: PaintingVariant.entries()
+  },
+  {
+    registryId: BannerPattern.Identifier,
+    entries: BannerPattern.entries()
+  },
+  {
+    registryId: ArmorTrimPattern.Identifier,
+    entries: ArmorTrimPattern.entries()
+  },
+  {
+    registryId: ArmorTrimMaterial.Identifier,
+    entries: ArmorTrimMaterial.entries()
+  },
+  {
+    registryId: ChatType.Identifier,
+    entries: ChatType.entries()
   }
 ];

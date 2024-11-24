@@ -1,8 +1,59 @@
-export const WolfVariantIdentifier = 'minecraft:wolf_variant' as const;
+import { NBTTagType, WritableNBT, type AllNBTTags } from '@arthurita/nbt';
+import type { CachedEntries } from '../registries/1.20.3-incomplete';
+import wolfVariantRegistry from '#assets/wolf-variants.json';
 
-export interface WolfVariant {
-  wildTexture: string;
-  tameTexture: string;
-  angryTexture: string;
-  biomes: string[] | string;
+let cached: CachedEntries | null = null;
+
+export namespace WolfVariant {
+  export const Identifier = 'minecraft:wolf_variant' as const;
+
+  export interface Payload {
+    wild_texture: string;
+    tame_texture: string;
+    angry_texture: string;
+    biomes: string;
+  }
+
+  export function entries() {
+    if (cached) return cached;
+
+    cached = Object.entries(wolfVariantRegistry[Identifier]).map(([key, value]) => ({
+      entryId: key,
+      data: WolfVariant.create(value)
+    }));
+
+    return cached;
+  }
+
+  export function create(payload: Payload) {
+    const data: AllNBTTags = {
+      name: '',
+      type: NBTTagType.Compound,
+      payload: [
+        {
+          name: 'wild_texture',
+          type: NBTTagType.String,
+          payload: payload.wild_texture
+        },
+        {
+          name: 'tame_texture',
+          type: NBTTagType.String,
+          payload: payload.tame_texture
+        },
+        {
+          name: 'angry_texture',
+          type: NBTTagType.String,
+          payload: payload.angry_texture
+        },
+        {
+          name: 'biomes',
+          type: NBTTagType.String,
+          payload: payload.biomes
+        }
+      ]
+    };
+
+    const nbt = new WritableNBT().serialize(data);
+    return nbt;
+  }
 }

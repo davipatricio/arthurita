@@ -130,12 +130,12 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
         gameMode: 0,
         hardcore: false,
         hasDeathLocation: false,
-        // deathDimensionName: 'minecraft:overworld',
-        // deathLocation: {
-        //   x: 1,
-        //   y: 2,
-        //   z: 3
-        // },
+        deathDimensionName: 'minecraft:overworld',
+        deathLocation: {
+          x: 1,
+          y: 2,
+          z: 3
+        },
         hashedSeed: 3199999999n,
         isDebug: false,
         isFlat: false,
