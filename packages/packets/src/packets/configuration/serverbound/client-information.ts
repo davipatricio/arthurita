@@ -13,10 +13,10 @@ export class ConfigurationServerboundClientInformationPacket extends Packet {
   constructor(data: Buffer) {
     super({ id: 0x02, data });
 
-    this.parse();
+    this.deserialize();
   }
 
-  parse() {
+  deserialize() {
     const locale = this.readString();
     const viewDistance = this.readByte();
     const chatMode = this.readVarInt();

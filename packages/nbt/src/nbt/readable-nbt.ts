@@ -11,7 +11,7 @@ export class ReadableNBT extends NBT {
     }
   }
 
-  parse() {
+  deserialize() {
     return this.parseTags();
   }
 

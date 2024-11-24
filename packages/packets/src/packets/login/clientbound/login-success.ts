@@ -9,10 +9,10 @@ export class LoginClientboundLoginStartPacket extends Packet {
   constructor(payload?: LoginClientboundLoginStartPacketPayload) {
     super({ id: 0x02 });
 
-    if (payload) this.setPayload(payload);
+    if (payload) this.serialize(payload);
   }
 
-  setPayload(payload: LoginClientboundLoginStartPacketPayload) {
+  serialize(payload: LoginClientboundLoginStartPacketPayload) {
     this.putUUID(payload.uuid);
     this.putString(payload.username);
     this.putVarInt(0);

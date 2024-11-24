@@ -7,10 +7,10 @@ export class ConfigurationServerboundKnownPacksPacket extends Packet {
   constructor(data: Buffer) {
     super({ id: 0x07, data });
 
-    this.parse();
+    this.deserialize();
   }
 
-  parse() {
+  deserialize() {
     const knownPacksCount = this.readVarInt();
     const knownPacks = [];
 

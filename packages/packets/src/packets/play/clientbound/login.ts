@@ -33,10 +33,10 @@ export class PlayClientboundLoginPacket extends Packet {
   constructor(payload?: PlayClientboundLoginPacketPayload) {
     super({ id: 0x2c });
 
-    if (payload) this.setPayload(payload);
+    if (payload) this.serialize(payload);
   }
 
-  setPayload(payload: PlayClientboundLoginPacketPayload) {
+  serialize(payload: PlayClientboundLoginPacketPayload) {
     this.putInt(payload.entityId);
     this.putBoolean(payload.hardcore);
 

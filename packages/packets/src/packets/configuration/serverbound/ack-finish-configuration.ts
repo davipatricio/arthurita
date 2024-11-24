@@ -4,10 +4,10 @@ export class ConfigurationServerboundAcknowledgeFinishConfigurationPacket extend
   constructor(data: Buffer) {
     super({ id: 0x03, data });
 
-    this.parse();
+    this.deserialize();
   }
 
-  parse() {
+  deserialize() {
     return;
   }
 }

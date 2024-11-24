@@ -167,7 +167,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       const _clientKnownPackets = new ConfigurationServerboundKnownPacksPacket(packet.buffer);
 
       // send registry
-      const registryDimensionNBT = new WritableNBT().writeTag({
+      const registryDimensionNBT = new WritableNBT().serialize({
         type: NBTTagType.Compound,
         name: '',
         payload: [
@@ -292,7 +292,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       wolfVariantRegistryPacket.putString('minecraft:black');
       wolfVariantRegistryPacket.putBoolean(true);
       wolfVariantRegistryPacket.putBuffer(
-        new WritableNBT().writeTag({
+        new WritableNBT().serialize({
           type: NBTTagType.Compound,
           name: '',
           payload: [
@@ -335,7 +335,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       worldgenBiomeRegistryPacket.putString('minecraft:old_growth_pine_taiga');
       worldgenBiomeRegistryPacket.putBoolean(true);
       worldgenBiomeRegistryPacket.putBuffer(
-        new WritableNBT().writeTag({
+        new WritableNBT().serialize({
           type: NBTTagType.Compound,
           name: '',
           payload: [

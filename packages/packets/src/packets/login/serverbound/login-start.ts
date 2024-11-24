@@ -7,10 +7,10 @@ export class LoginServerboundLoginStartPacket extends Packet {
   constructor(data: Buffer) {
     super({ id: 0x00, data });
 
-    this.parse();
+    this.deserialize();
   }
 
-  parse() {
+  deserialize() {
     const username = this.readString();
     const uuid = this.readUUID();
 

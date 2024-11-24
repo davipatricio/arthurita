@@ -8,10 +8,10 @@ export class StatusClientboundPongResponsePacket extends Packet {
   constructor(payload?: StatusClientboundPongResponsePacketPayload) {
     super({ id: 0x01 });
 
-    if (payload) this.setPayload(payload);
+    if (payload) this.serialize(payload);
   }
 
-  setPayload(payload: StatusClientboundPongResponsePacketPayload) {
+  serialize(payload: StatusClientboundPongResponsePacketPayload) {
     this.putLong(payload.timestamp);
   }
 }

@@ -4,9 +4,9 @@ const serverList = await Bun.file('./servers.dat');
 
 const serverListBuf = Buffer.from(await serverList.arrayBuffer());
 const serverListNbt = new ReadableNBT(serverListBuf);
-console.log(serverListNbt.parse());
+console.log(serverListNbt.deserialize());
 
-const serverListCreatedNbt = new WritableNBT().writeTag({
+const serverListCreatedNbt = new WritableNBT().serialize({
   name: '',
   type: NBTTagType.Compound,
   payload: [
@@ -30,4 +30,4 @@ const serverListCreatedNbt = new WritableNBT().writeTag({
   ]
 });
 
-console.log(new ReadableNBT(serverListCreatedNbt).parse());
+console.log(new ReadableNBT(serverListCreatedNbt).deserialize());

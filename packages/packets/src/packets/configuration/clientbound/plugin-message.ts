@@ -9,10 +9,10 @@ export class ConfigurationClientboundPluginMessagePacket extends Packet {
   constructor(payload?: ConfigurationClientboundPluginMessagePacketPayload) {
     super({ id: 0x01 });
 
-    if (payload) this.setPayload(payload);
+    if (payload) this.serialize(payload);
   }
 
-  setPayload(payload: ConfigurationClientboundPluginMessagePacketPayload) {
+  serialize(payload: ConfigurationClientboundPluginMessagePacketPayload) {
     this.putString(payload.channel);
     this.putBuffer(payload.data);
   }

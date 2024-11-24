@@ -10,10 +10,10 @@ export class ConfigurationClientboundKnownPacksPacket extends Packet {
   constructor(payload?: ConfigurationClientboundKnownPacksPacketPayload) {
     super({ id: 0x0e });
 
-    if (payload) this.setPayload(payload);
+    if (payload) this.serialize(payload);
   }
 
-  setPayload(payload: ConfigurationClientboundKnownPacksPacketPayload) {
+  serialize(payload: ConfigurationClientboundKnownPacksPacketPayload) {
     this.putVarInt(payload.length);
 
     for (const pack of payload) {

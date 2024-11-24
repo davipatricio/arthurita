@@ -22,10 +22,10 @@ export class StatusClientboundStatusResponsePacket extends Packet {
   constructor(payload?: StatusClientboundStatusResponsePacketPayload) {
     super({ id: 0x00 });
 
-    if (payload) this.setPayload(payload);
+    if (payload) this.serialize(payload);
   }
 
-  setPayload(payload: StatusClientboundStatusResponsePacketPayload) {
+  serialize(payload: StatusClientboundStatusResponsePacketPayload) {
     this.putString(JSON.stringify(payload));
   }
 }

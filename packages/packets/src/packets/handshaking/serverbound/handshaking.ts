@@ -9,10 +9,10 @@ export class HandshakingServerboundHandshakePacket extends Packet {
   constructor(data: Buffer) {
     super({ id: 0x00, data });
 
-    this.parse();
+    this.deserialize();
   }
 
-  parse() {
+  deserialize() {
     const protocol = this.readVarInt();
     const serverAddress = this.readString();
     const serverPort = this.readUnsignedShort();

@@ -6,10 +6,10 @@ export class HandshakingServerboundPingRequestPacket extends Packet {
   constructor(data: Buffer) {
     super({ id: 0x01, data });
 
-    this.parse();
+    this.deserialize();
   }
 
-  parse() {
+  deserialize() {
     const timestamp = this.readLong();
     this.timestamp = timestamp;
   }

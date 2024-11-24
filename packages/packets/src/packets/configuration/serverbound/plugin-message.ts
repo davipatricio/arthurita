@@ -7,10 +7,10 @@ export class ConfigurationServerboundPluginMessagePacket extends Packet {
   constructor(data: Buffer) {
     super({ id: 0x02, data });
 
-    this.parse();
+    this.deserialize();
   }
 
-  parse() {
+  deserialize() {
     const channel = this.readString();
 
     this.channel = channel;

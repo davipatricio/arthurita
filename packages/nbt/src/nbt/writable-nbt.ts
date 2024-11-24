@@ -11,7 +11,7 @@ export class WritableNBT extends NBT {
     }
   }
 
-  public writeTag(tag: AllNBTTags) {
+  public serialize(tag: AllNBTTags) {
     this.putByte(tag.type);
 
     if (tag.type !== NBTTagType.End) {
@@ -87,7 +87,7 @@ export class WritableNBT extends NBT {
   }
 
   private putCompound(tags: AllNBTTags[]) {
-    for (const tag of tags) this.writeTag(tag);
+    for (const tag of tags) this.serialize(tag);
     this.putByte(NBTTagType.End);
     return this;
   }
