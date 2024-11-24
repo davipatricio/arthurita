@@ -1,6 +1,6 @@
 import { type Player, PlayerState } from '@/structures/Player';
 import { ByteBuffer } from '@arthurita/encoding';
-import { NBT, NBTTagType } from '@arthurita/nbt';
+import { NBTTagType, WritableNBT } from '@arthurita/nbt';
 import {
   ConfigurationClientboundFinishConfigurationPacket,
   ConfigurationClientboundKnownPacksPacket,
@@ -167,8 +167,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       const _clientKnownPackets = new ConfigurationServerboundKnownPacksPacket(packet.buffer);
 
       // send registry
-      // minecraft:dimension_type
-      const registryDimensionNBT = new NBT().writeTag({
+      const registryDimensionNBT = new WritableNBT().writeTag({
         type: NBTTagType.Compound,
         name: '',
         payload: [
@@ -293,7 +292,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       wolfVariantRegistryPacket.putString('minecraft:black');
       wolfVariantRegistryPacket.putBoolean(true);
       wolfVariantRegistryPacket.putBuffer(
-        new NBT().writeTag({
+        new WritableNBT().writeTag({
           type: NBTTagType.Compound,
           name: '',
           payload: [
@@ -336,7 +335,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       worldgenBiomeRegistryPacket.putString('minecraft:old_growth_pine_taiga');
       worldgenBiomeRegistryPacket.putBoolean(true);
       worldgenBiomeRegistryPacket.putBuffer(
-        new NBT().writeTag({
+        new WritableNBT().writeTag({
           type: NBTTagType.Compound,
           name: '',
           payload: [

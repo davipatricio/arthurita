@@ -1,25 +1,25 @@
-import { NBT, NBTType } from '../../packages/nbt';
+import { NBTTagType, ReadableNBT, WritableNBT } from '../../packages/nbt';
 
 const serverList = await Bun.file('./servers.dat');
-const serverListBuf = Buffer.from(await serverList.arrayBuffer());
 
-const serverListNbt = new NBT(serverListBuf);
+const serverListBuf = Buffer.from(await serverList.arrayBuffer());
+const serverListNbt = new ReadableNBT(serverListBuf);
 console.log(serverListNbt.parse());
 
-const serverListCreatedNbt = new NBT().writeTag({
+const serverListCreatedNbt = new WritableNBT().writeTag({
   name: '',
-  type: NBTType.TAG_Compound,
+  type: NBTTagType.Compound,
   payload: [
     {
       name: 'servers',
-      type: NBTType.TAG_List,
-      itemsType: NBTType.TAG_Compound,
+      type: NBTTagType.List,
+      itemsType: NBTTagType.Compound,
       payload: [
         {
-          type: NBTType.TAG_Compound,
+          type: NBTTagType.Compound,
           payload: [
             {
-              type: NBTType.TAG_Byte,
+              type: NBTTagType.Byte,
               name: 'acceptTextures',
               payload: 1
             }
@@ -29,4 +29,5 @@ const serverListCreatedNbt = new NBT().writeTag({
     }
   ]
 });
-console.log(serverListCreatedNbt.parse());
+
+console.log(new ReadableNBT(serverListCreatedNbt).parse());
