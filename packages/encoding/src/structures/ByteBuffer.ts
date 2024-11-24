@@ -132,6 +132,23 @@ export class ByteBuffer {
     return uuidSigBitsToStr({ msb, lsb });
   }
 
+  readTeleportFlags() {
+    const value = this.readInt();
+    const flags = {
+      relativeX: (value & 0x0001) !== 0,
+      relativeY: (value & 0x0002) !== 0,
+      relativeZ: (value & 0x0004) !== 0,
+      relativeYaw: (value & 0x0008) !== 0,
+      relativePitch: (value & 0x0010) !== 0,
+      relativeVelocityX: (value & 0x0020) !== 0,
+      relativeVelocityY: (value & 0x0040) !== 0,
+      relativeVelocityZ: (value & 0x0080) !== 0,
+      rotateVelocity: (value & 0x0100) !== 0
+    };
+
+    return flags;
+  }
+
   allocate(size: number) {
     // @ts-expect-error
     this.buffer = Buffer.concat([this.buffer, Buffer.alloc(size)]);
@@ -267,6 +284,33 @@ export class ByteBuffer {
     const { msb, lsb } = uuidStrToSigBits(value);
     this.putLong(msb);
     this.putLong(lsb);
+    return this;
+  }
+
+  putTeleportFlags(value: {
+    relativeX: boolean;
+    relativeY: boolean;
+    relativeZ: boolean;
+    relativeYaw: boolean;
+    relativePitch: boolean;
+    relativeVelocityX: boolean;
+    relativeVelocityY: boolean;
+    relativeVelocityZ: boolean;
+    rotateVelocity: boolean;
+  }) {
+    let flags = 0;
+
+    if (value.relativeX) flags |= 0x0001;
+    if (value.relativeY) flags |= 0x0002;
+    if (value.relativeZ) flags |= 0x0004;
+    if (value.relativeYaw) flags |= 0x0008;
+    if (value.relativePitch) flags |= 0x0010;
+    if (value.relativeVelocityX) flags |= 0x0020;
+    if (value.relativeVelocityY) flags |= 0x0040;
+    if (value.relativeVelocityZ) flags |= 0x0080;
+    if (value.rotateVelocity) flags |= 0x0100;
+
+    this.putInt(flags);
     return this;
   }
 }

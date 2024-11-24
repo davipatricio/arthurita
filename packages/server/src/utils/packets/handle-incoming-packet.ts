@@ -151,15 +151,30 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       });
       player.sendPacket(loginPlacket);
 
-      const syncPlayerPosPacket = new Packet({ id: 1 });
-      syncPlayerPosPacket.putDouble(1);
-      syncPlayerPosPacket.putDouble(2);
-      syncPlayerPosPacket.putDouble(3);
-      syncPlayerPosPacket.putFloat(1);
-      syncPlayerPosPacket.putFloat(1);
-      syncPlayerPosPacket.putByte(0);
-      syncPlayerPosPacket.putVarInt(1);
-      // player.sendPacket(syncPlayerPosPacket);
+      const syncPlayerPosPacket = new Packet({ id: 0x42 });
+      syncPlayerPosPacket.putVarInt(1024); // teleport id
+      syncPlayerPosPacket.putDouble(1); // x
+      syncPlayerPosPacket.putDouble(2); // y
+      syncPlayerPosPacket.putDouble(3); // z
+
+      syncPlayerPosPacket.putDouble(0); // velocity x
+      syncPlayerPosPacket.putDouble(0); // velocity y
+      syncPlayerPosPacket.putDouble(0); // velocity z
+
+      syncPlayerPosPacket.putFloat(1); //yaw
+      syncPlayerPosPacket.putFloat(1); // pitch
+      syncPlayerPosPacket.putTeleportFlags({
+        relativePitch: false,
+        relativeYaw: false,
+        relativeVelocityX: false,
+        relativeX: false,
+        relativeY: false,
+        relativeZ: false,
+        relativeVelocityY: false,
+        relativeVelocityZ: false,
+        rotateVelocity: false
+      }); // teleport flags
+      player.sendPacket(syncPlayerPosPacket);
       break;
     }
     case 0x07: {
