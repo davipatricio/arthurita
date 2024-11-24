@@ -99,7 +99,7 @@ export class WritableNBT extends NBT {
     return this;
   }
 
-  putString(value: string) {
+  override putString(value: string) {
     const encoded = Buffer.from(value, 'utf8');
     this.putUnsignedShort(value.length);
     this.allocate(encoded.length);

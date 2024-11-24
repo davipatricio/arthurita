@@ -1,4 +1,4 @@
-import { Packet } from '@/structures/Packet';
+import { Packet } from '#structures/Packet';
 
 type ConfigurationClientboundKnownPacksPacketPayload = {
   namespace: string;

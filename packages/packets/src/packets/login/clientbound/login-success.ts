@@ -1,18 +1,18 @@
-import { Packet } from '@/structures/Packet';
+import { Packet } from '#structures/Packet';
 
-interface LoginClientboundLoginStartPacketPayload {
+interface LoginClientboundLoginSuccessPacketPayload {
   username: string;
   uuid: string;
 }
 
-export class LoginClientboundLoginStartPacket extends Packet {
-  constructor(payload?: LoginClientboundLoginStartPacketPayload) {
+export class LoginClientboundLoginSuccessPacket extends Packet {
+  constructor(payload?: LoginClientboundLoginSuccessPacketPayload) {
     super({ id: 0x02 });
 
     if (payload) this.serialize(payload);
   }
 
-  serialize(payload: LoginClientboundLoginStartPacketPayload) {
+  serialize(payload: LoginClientboundLoginSuccessPacketPayload) {
     this.putUUID(payload.uuid);
     this.putString(payload.username);
     this.putVarInt(0);

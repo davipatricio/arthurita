@@ -1,25 +1,28 @@
 {
   "name": "@arthurita/encoding",
-  "version": "0.0.1",
+  "description": "Utilities for Minecraft packets",
   "author": "Davi Patricio <davipatricio@pm.me>",
+  "version": "0.0.1",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "biome check .",
+    "format": "biome check --write --unsafe ."
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/davipatricio/arthurita.git",
     "directory": "packages/encoding"
   },
-  "main": "src/index.ts",
+  "imports": {
+    "#utils/*": "./src/utils/*.ts"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.1-rc"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/bun": "^1.1.13"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "description": "Utilities for Minecraft packets",
-  "license": "MIT",
-  "scripts": {
-    "lint": "biome check .",
-    "format": "biome check --write --unsafe ."
-  },
-  "type": "module"
+  }
 }

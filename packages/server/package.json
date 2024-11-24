@@ -15,13 +15,17 @@
     "url": "https://github.com/davipatricio/arthurita.git",
     "directory": "packages/server"
   },
+  "imports": {
+    "#structures/*": "./src/structures/*.ts",
+    "#utils/*": "./src/utils/*.ts"
+  },
   "dependencies": {
     "@arthurita/encoding": "workspace:*",
     "@arthurita/packets": "workspace:*",
     "@arthurita/nbt": "workspace:*"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.7.1-rc"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

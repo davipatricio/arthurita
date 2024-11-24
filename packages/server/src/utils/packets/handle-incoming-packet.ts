@@ -1,4 +1,3 @@
-import { type Player, PlayerState } from '@/structures/Player';
 import { ByteBuffer } from '@arthurita/encoding';
 import { NBTTagType, WritableNBT } from '@arthurita/nbt';
 import {
@@ -11,13 +10,14 @@ import {
   ConfigurationServerboundPluginMessagePacket,
   HandshakingServerboundHandshakePacket,
   HandshakingServerboundPingRequestPacket,
-  LoginClientboundLoginStartPacket,
+  LoginClientboundLoginSuccessPacket,
   LoginServerboundLoginStartPacket,
   Packet,
   PlayClientboundLoginPacket,
   StatusClientboundPongResponsePacket,
   StatusClientboundStatusResponsePacket
 } from '@arthurita/packets';
+import { type Player, PlayerState } from '#structures/Player';
 
 interface HandleIncomingPacketOptions {
   player: Player;
@@ -75,7 +75,7 @@ function handleStatusPackets({ player, packet }: HandleIncomingPacketOptions) {
         description: {
           text: 'Hello, world!'
         }
-      }) as unknown as Packet;
+      });
 
       player.sendPacket(pkt);
       break;
@@ -83,7 +83,7 @@ function handleStatusPackets({ player, packet }: HandleIncomingPacketOptions) {
 
     case 0x01: {
       const received = new HandshakingServerboundPingRequestPacket(packet.buffer);
-      const pkt = new StatusClientboundPongResponsePacket({ timestamp: received.timestamp }) as unknown as Packet;
+      const pkt = new StatusClientboundPongResponsePacket({ timestamp: received.timestamp });
       player.sendPacket(pkt);
       player.socket.end();
       break;
@@ -103,13 +103,11 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       player.metadata.client.isCharacterRightHanded = clientInformationPacket.mainHand === 1;
       player.metadata.client.textFiltering = clientInformationPacket.enableTextFiltering;
       player.metadata.client.allowServerList = clientInformationPacket.allowServerListings;
-
       break;
     }
+
     case 0x02: {
-      const configPluginMessagePacket = new ConfigurationServerboundPluginMessagePacket(
-        packet.buffer
-      ) as unknown as ConfigurationServerboundPluginMessagePacket & Packet;
+      const configPluginMessagePacket = new ConfigurationServerboundPluginMessagePacket(packet.buffer);
 
       if (configPluginMessagePacket.channel === 'minecraft:brand') {
         const brand = configPluginMessagePacket.readString();
@@ -119,7 +117,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       break;
     }
     case 0x03: {
-      const _ackFinishConfigurationPacket = new ConfigurationServerboundAcknowledgeFinishConfigurationPacket(packet.buffer);
+      new ConfigurationServerboundAcknowledgeFinishConfigurationPacket(packet.buffer);
       player.setState(PlayerState.Play);
 
       const loginPlacket = new PlayClientboundLoginPacket({
@@ -149,7 +147,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
         currentDimensionType: 0,
         currentDimensionName: 'minecraft:overworld',
         seaLevel: 63
-      }) as unknown as Packet;
+      });
       player.sendPacket(loginPlacket);
 
       const syncPlayerPosPacket = new Packet({ id: 1 });
@@ -164,7 +162,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       break;
     }
     case 0x07: {
-      const _clientKnownPackets = new ConfigurationServerboundKnownPacksPacket(packet.buffer);
+      new ConfigurationServerboundKnownPacksPacket(packet.buffer);
 
       // send registry
       const registryDimensionNBT = new WritableNBT().serialize({
@@ -437,7 +435,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       );
       player.sendPacket(worldgenBiomeRegistryPacket);
 
-      const finishConfigurationPacket = new ConfigurationClientboundFinishConfigurationPacket() as unknown as Packet;
+      const finishConfigurationPacket = new ConfigurationClientboundFinishConfigurationPacket();
       player.sendPacket(finishConfigurationPacket);
       break;
     }
@@ -451,10 +449,10 @@ function handleLoginPackets({ player, packet }: HandleIncomingPacketOptions) {
       player.username = loginStartPacket.username;
       player.uuid = loginStartPacket.uuid;
 
-      const loginSuccessPacket = new LoginClientboundLoginStartPacket({
+      const loginSuccessPacket = new LoginClientboundLoginSuccessPacket({
         username: player.username,
         uuid: player.uuid
-      }) as unknown as Packet;
+      });
       player.sendPacket(loginSuccessPacket);
       break;
     }
@@ -465,13 +463,13 @@ function handleLoginPackets({ player, packet }: HandleIncomingPacketOptions) {
       const serverBrandPacket = new ConfigurationClientboundPluginMessagePacket({
         channel: 'minecraft:brand',
         data: new ByteBuffer().putString('arthurita|development').buffer
-      }) as unknown as ConfigurationClientboundPluginMessagePacket & Packet;
+      });
       player.sendPacket(serverBrandPacket);
 
       const knownPackets = new ConfigurationClientboundKnownPacksPacket([
         { namespace: 'minecraft', id: 'core', version: '1.21.3' },
         { namespace: 'minecraft', id: 'core', version: '1.21.2' }
-      ]) as unknown as ConfigurationClientboundKnownPacksPacket & Packet;
+      ]);
       player.sendPacket(knownPackets);
       break;
     }

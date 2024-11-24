@@ -1,4 +1,4 @@
-import { uuidSigBitsToStr, uuidStrToSigBits } from '@/utils/uuid';
+import { uuidSigBitsToStr, uuidStrToSigBits } from '#utils/uuid';
 
 const CONTINUE_BIT = 0x80;
 const SEGMENT_BITS = 0x7f;
@@ -111,7 +111,8 @@ export class ByteBuffer {
 
   readString() {
     const length = this.readVarInt();
-    const value = new TextDecoder().decode(this.buffer.subarray(0, length));
+    // const value = new TextDecoder().decode(this.buffer.subarray(0, length));
+    const value = this.buffer.toString('utf-8', 0, length);
     this.advance(length);
     return value;
   }
@@ -245,7 +246,7 @@ export class ByteBuffer {
   }
 
   putString(value: string) {
-    const encoded = new TextEncoder().encode(value);
+    const encoded = Buffer.from(value, 'utf-8');
     this.putVarInt(encoded.length);
     this.allocate(encoded.length);
     this.buffer.set(encoded, this.buffer.length - encoded.length);

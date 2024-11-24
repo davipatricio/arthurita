@@ -1,4 +1,4 @@
-import { Packet } from '@/structures/Packet';
+import { Packet } from '#structures/Packet';
 
 interface StatusClientboundStatusResponsePacketPayload {
   version: {

@@ -81,7 +81,7 @@ export class ReadableNBT extends NBT {
     return payload;
   }
 
-  public readString() {
+  public override readString() {
     const length = this.readUnsignedShort();
     const payload = this.buffer.toString('utf8', 0, length);
     this.advance(length);

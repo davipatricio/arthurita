@@ -1,4 +1,4 @@
-import { Packet } from '@/structures/Packet';
+import { Packet } from '#structures/Packet';
 
 export class HandshakingServerboundPingRequestPacket extends Packet {
   public timestamp: bigint;
