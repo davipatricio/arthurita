@@ -1,17 +1,27 @@
 // https://stackoverflow.com/questions/66304547/javascript-typescript-convert-uuid-from-most-significant-bits-msb-least-signi
-export function uuidSigBitsToStr({ lsb, msb }: { lsb: bigint; msb: bigint }): `${string}-${string}-${string}-${string}-${string}` {
+const invalidUUIDError = () => new Error('Invalid UUID string');
+
+type SerializedUUID = `${string}-${string}-${string}-${string}-${string}`;
+
+interface UUIDSigBitsOptions {
+  lsb: bigint;
+  msb: bigint;
+}
+
+export function uuidSigBitsToStr({ lsb, msb }: UUIDSigBitsOptions): SerializedUUID {
   return `${digits(msb >> 32n, 8n)}-${digits(msb >> 16n, 4n)}-${digits(msb, 4n)}-${digits(lsb >> 48n, 4n)}-${digits(lsb, 12n)}`;
 }
 
-export function uuidStrToSigBits(uuid: string) {
-  const invalidError = () => new Error(`Invalid UUID string: '${uuid}'`);
-  if (uuid == null || typeof uuid !== 'string') throw invalidError();
+export function uuidStrToSigBits(uuid: string): UUIDSigBitsOptions {
+  if (uuid == null || typeof uuid !== 'string') throw invalidUUIDError();
 
   const parts = uuid.split('-').map((p) => `0x${p}`);
-  if (parts.length !== 5) throw invalidError();
+  if (parts.length !== 5) throw invalidUUIDError();
 
   return {
+    // @ts-expect-error
     lsb: (hexStrToBigInt(parts[3]) << 48n) | hexStrToBigInt(parts[4]),
+    // @ts-expect-error
     msb: (hexStrToBigInt(parts[0]) << 32n) | (hexStrToBigInt(parts[1]) << 16n) | hexStrToBigInt(parts[2])
   };
 }
