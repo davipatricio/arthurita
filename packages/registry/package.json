@@ -1,6 +1,6 @@
 {
-  "name": "@arthurita/server",
-  "description": "Build a fast Minecraft server with Bun and TypeScript.",
+  "name": "@arthurita/registry",
+  "description": "Registry data for vanilla Minecraft 1.20.3",
   "author": "Davi Patricio <davipatricio@pm.me>",
   "version": "0.0.1",
   "license": "MIT",
@@ -13,16 +13,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/davipatricio/arthurita.git",
-    "directory": "packages/server"
-  },
-  "imports": {
-    "#structures/*": "./src/structures/*.ts",
-    "#utils/*": "./src/utils/*.ts"
+    "directory": "packages/registry"
   },
   "dependencies": {
-    "@arthurita/encoding": "workspace:*",
-    "@arthurita/packets": "workspace:*",
-    "@arthurita/registry": "workspace:*",
     "@arthurita/nbt": "workspace:*"
   },
   "peerDependencies": {

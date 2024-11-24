@@ -1,5 +1,5 @@
 import { ByteBuffer } from '@arthurita/encoding';
-import { NBTTagType, WritableNBT } from '@arthurita/nbt';
+import { NBT } from '@arthurita/nbt';
 import {
   ConfigurationClientboundFinishConfigurationPacket,
   ConfigurationClientboundKnownPacksPacket,
@@ -18,6 +18,7 @@ import {
   StatusClientboundStatusResponsePacket
 } from '@arthurita/packets';
 import { type Player, PlayerState } from '#structures/Player';
+import { cachedRegistries } from '@arthurita/registry';
 
 interface HandleIncomingPacketOptions {
   player: Player;
@@ -164,276 +165,27 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
     case 0x07: {
       new ConfigurationServerboundKnownPacksPacket(packet.buffer);
 
-      // send registry
-      const registryDimensionNBT = new WritableNBT().serialize({
-        type: NBTTagType.Compound,
-        name: '',
-        payload: [
-          {
-            name: 'fixed_time',
-            type: NBTTagType.Long,
-            payload: 6000n
-          },
-          {
-            name: 'has_skylight',
-            type: NBTTagType.Byte,
-            payload: 1
-          },
-          {
-            name: 'has_ceiling',
-            type: NBTTagType.Byte,
-            payload: 0
-          },
-          {
-            name: 'ultrawarm',
-            type: NBTTagType.Byte,
-            payload: 0
-          },
-          {
-            name: 'natural',
-            type: NBTTagType.Byte,
-            payload: 1
-          },
-          {
-            name: 'coordinate_scale',
-            type: NBTTagType.Double,
-            payload: 1.0
-          },
-          {
-            name: 'bed_works',
-            type: NBTTagType.Byte,
-            payload: 1
-          },
-          {
-            name: 'respawn_anchor_works',
-            type: NBTTagType.Byte,
-            payload: 1
-          },
-          {
-            name: 'min_y',
-            type: NBTTagType.Int,
-            payload: 0
-          },
-          {
-            name: 'height',
-            type: NBTTagType.Int,
-            payload: 256
-          },
-          {
-            name: 'logical_height',
-            type: NBTTagType.Int,
-            payload: 256
-          },
-          {
-            name: 'infiniburn',
-            type: NBTTagType.String,
-            // payload: 'minecraft:infiniburn_overworld'
-            payload: '#'
-          },
-          {
-            name: 'effects',
-            type: NBTTagType.String,
-            payload: 'minecraft:overworld'
-          },
-          {
-            name: 'ambient_light',
-            type: NBTTagType.Float,
-            payload: 0.0
-          },
-          {
-            name: 'piglin_safe',
-            type: NBTTagType.Byte,
-            payload: 0
-          },
-          {
-            name: 'has_raids',
-            type: NBTTagType.Byte,
-            payload: 1
-          },
-          {
-            name: 'monster_spawn_light_level',
-            type: NBTTagType.Int,
-            payload: 7
-          },
-          {
-            name: 'monster_spawn_block_light_limit',
-            type: NBTTagType.Int,
-            payload: 7
+      // send registries
+      for (const registry of cachedRegistries) {
+        const registryPacket = new Packet({ id: 0x07 });
+
+        registryPacket.putString(registry.registryId);
+        registryPacket.putVarInt(registry.entries.length);
+
+        for (const entry of registry.entries) {
+          registryPacket.putString(entry.entryId);
+
+          if (entry.data instanceof NBT) {
+            registryPacket.putBoolean(true);
+            registryPacket.putBuffer(entry.data.networkBuffer);
+            continue;
           }
-        ]
-      });
 
-      const dimensionRegistryPacket = new Packet({
-        id: 0x07
-      });
-      dimensionRegistryPacket.putString('minecraft:dimension_type');
-      dimensionRegistryPacket.putVarInt(1);
-      dimensionRegistryPacket.putString('minecraft:overworld');
-      dimensionRegistryPacket.putBoolean(true);
-      dimensionRegistryPacket.putBuffer(registryDimensionNBT.networkBuffer);
-      player.sendPacket(dimensionRegistryPacket);
+          registryPacket.putBoolean(false);
+        }
 
-      const paintingRegistryPacket = new Packet({
-        id: 0x07
-      });
-      paintingRegistryPacket.putString('minecraft:painting_variant');
-      paintingRegistryPacket.putVarInt(1);
-      paintingRegistryPacket.putString('minecraft:kebab');
-      paintingRegistryPacket.putBoolean(false);
-      player.sendPacket(paintingRegistryPacket);
-
-      const wolfVariantRegistryPacket = new Packet({
-        id: 0x07
-      });
-      wolfVariantRegistryPacket.putString('minecraft:wolf_variant');
-      wolfVariantRegistryPacket.putVarInt(1);
-      wolfVariantRegistryPacket.putString('minecraft:black');
-      wolfVariantRegistryPacket.putBoolean(true);
-      wolfVariantRegistryPacket.putBuffer(
-        new WritableNBT().serialize({
-          type: NBTTagType.Compound,
-          name: '',
-          payload: [
-            {
-              name: 'wild_texture',
-              type: NBTTagType.String,
-              payload: 'minecraft:entity/wolf/wolf_black_angry'
-            },
-            {
-              name: 'tame_texture',
-              type: NBTTagType.String,
-              payload: 'minecraft:entity/wolf/wolf_black_tame'
-            },
-            {
-              name: 'angry_texture',
-              type: NBTTagType.String,
-              payload: 'minecraft:entity/wolf/wolf_black'
-            },
-            {
-              name: 'biomes',
-              type: NBTTagType.List,
-              itemsType: NBTTagType.String,
-              payload: [
-                {
-                  type: NBTTagType.String,
-                  payload: 'minecraft:old_growth_pine_taiga'
-                }
-              ]
-            }
-          ]
-        }).networkBuffer
-      );
-      player.sendPacket(wolfVariantRegistryPacket);
-
-      const worldgenBiomeRegistryPacket = new Packet({
-        id: 0x07
-      });
-      worldgenBiomeRegistryPacket.putString('minecraft:worldgen/biome');
-      worldgenBiomeRegistryPacket.putVarInt(1);
-      worldgenBiomeRegistryPacket.putString('minecraft:old_growth_pine_taiga');
-      worldgenBiomeRegistryPacket.putBoolean(true);
-      worldgenBiomeRegistryPacket.putBuffer(
-        new WritableNBT().serialize({
-          type: NBTTagType.Compound,
-          name: '',
-          payload: [
-            {
-              type: NBTTagType.Byte,
-              name: 'has_precipitation',
-              payload: 1
-            },
-            {
-              type: NBTTagType.Float,
-              name: 'temperature',
-              payload: 0.30000001192092896
-            },
-            {
-              type: NBTTagType.Float,
-              name: 'downfall',
-              payload: 0.800000011920929
-            },
-            {
-              type: NBTTagType.Compound,
-              name: 'effects',
-              payload: [
-                {
-                  type: NBTTagType.Int,
-                  name: 'fog_color',
-                  payload: 12638463
-                },
-                {
-                  type: NBTTagType.Int,
-                  name: 'water_color',
-                  payload: 4159204
-                },
-                {
-                  type: NBTTagType.Int,
-                  name: 'water_fog_color',
-                  payload: 4159204
-                },
-                {
-                  type: NBTTagType.Int,
-                  name: 'sky_color',
-                  payload: 8168447
-                },
-                {
-                  type: NBTTagType.Compound,
-                  name: 'mood_sound',
-                  payload: [
-                    {
-                      type: NBTTagType.Int,
-                      name: 'block_search_extent',
-                      payload: 8
-                    },
-                    {
-                      type: NBTTagType.Double,
-                      name: 'offset',
-                      payload: 2.0
-                    },
-                    {
-                      type: NBTTagType.String,
-                      name: 'sound',
-                      payload: 'minecraft:ambient.cave'
-                    },
-                    {
-                      type: NBTTagType.Int,
-                      name: 'tick_delay',
-                      payload: 6000
-                    }
-                  ]
-                },
-                {
-                  type: NBTTagType.Compound,
-                  name: 'music',
-                  payload: [
-                    {
-                      type: NBTTagType.Int,
-                      name: 'max_delay',
-                      payload: 24000
-                    },
-                    {
-                      type: NBTTagType.Int,
-                      name: 'min_delay',
-                      payload: 12000
-                    },
-                    {
-                      type: NBTTagType.Byte,
-                      name: 'replace_current_music',
-                      payload: 0
-                    },
-                    {
-                      type: NBTTagType.String,
-                      name: 'sound',
-                      payload: 'minecraft:music.overworld.old_growth_taiga'
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }).networkBuffer
-      );
-      player.sendPacket(worldgenBiomeRegistryPacket);
+        player.sendPacket(registryPacket);
+      }
 
       const finishConfigurationPacket = new ConfigurationClientboundFinishConfigurationPacket();
       player.sendPacket(finishConfigurationPacket);
