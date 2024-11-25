@@ -1,3 +1,3 @@
 export * from './ByteBuffer';
-export * from './ReadableByteBuffer';
-export * from './WritableByteBuffer';
+export * from './readable-byte-buffer';
+export * from './writable-byte-buffer';

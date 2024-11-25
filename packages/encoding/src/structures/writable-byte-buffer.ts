@@ -1,10 +1,16 @@
+import type { NBT } from '@arthurita/nbt';
 import { uuidStrToSigBits } from '#utils/uuid';
-import { ReadableByteBuffer } from './ReadableByteBuffer';
+import { ReadableByteBuffer } from './readable-byte-buffer';
 
 export class WritableByteBuffer extends ReadableByteBuffer {
   putBuffer(value: Buffer) {
     this.allocate(value.length);
     this.buffer.set(value, this.buffer.length - value.length);
+    return this;
+  }
+
+  putNBT(value: NBT) {
+    this.putBuffer(value.networkBuffer);
     return this;
   }
 
