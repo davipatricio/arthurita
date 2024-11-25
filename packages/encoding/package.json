@@ -18,6 +18,9 @@
   "imports": {
     "#utils/*": "./src/utils/*.ts"
   },
+  "dependencies": {
+    "@arthurita/nbt": "workspace:*"
+  },
   "peerDependencies": {
     "typescript": "^5.7.1-rc"
   },

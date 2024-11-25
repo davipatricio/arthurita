@@ -1,6 +1,11 @@
 import { randomBytes } from 'node:crypto';
 import type { Socket } from 'node:net';
-import type { Packet } from '@arthurita/packets';
+import {
+  ConfigurationClientboundDisconnectPacket,
+  LoginClientboundDisconnectPacket,
+  type Packet,
+  PlayClientboundDisconnectPacket
+} from '@arthurita/packets';
 import { PlayerHeartbeater } from './PlayerHeartbeater';
 
 export enum PlayerState {
@@ -28,6 +33,7 @@ interface PlayerData {
     isCharacterRightHanded: boolean;
     textFiltering: boolean;
     allowServerList: boolean;
+    protocol: number;
   }>;
 }
 
@@ -50,8 +56,30 @@ export class Player {
   }
 
   public sendPacket(packet: Packet) {
-    // @ts-expect-error
     this.socket.write(packet.payload);
+  }
+
+  public disconnect(reason: string) {
+    let packet = null;
+
+    switch (this.state) {
+      case PlayerState.Login:
+        packet = new LoginClientboundDisconnectPacket({ reason });
+        break;
+      case PlayerState.Configuration:
+        packet = new ConfigurationClientboundDisconnectPacket({ reason });
+        break;
+      case PlayerState.Play:
+        packet = new PlayClientboundDisconnectPacket({ reason });
+        break;
+    }
+
+    if (packet == null) {
+      this.socket.end();
+      return;
+    }
+
+    this.sendPacket(packet);
   }
 
   public setState(state: PlayerState) {

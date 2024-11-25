@@ -19,7 +19,8 @@
     "#structures/*": "./src/structures/*.ts"
   },
   "dependencies": {
-    "@arthurita/encoding": "workspace:*"
+    "@arthurita/encoding": "workspace:*",
+    "@arthurita/nbt": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5.7.1-rc"

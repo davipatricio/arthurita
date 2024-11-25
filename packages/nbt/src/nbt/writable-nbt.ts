@@ -14,10 +14,8 @@ export class WritableNBT extends NBT {
   public serialize(tag: AllNBTTags) {
     this.putByte(tag.type);
 
-    if (tag.type !== NBTTagType.End) {
-      this.putString(tag.name ?? '');
-      this.putPayload(tag);
-    }
+    if ('name' in tag) this.putString(tag.name);
+    this.putPayload(tag);
 
     return this;
   }
@@ -102,7 +100,7 @@ export class WritableNBT extends NBT {
 
   override putString(value: string) {
     const encoded = Buffer.from(value, 'utf8');
-    this.putUnsignedShort(value.length);
+    this.putUnsignedShort(encoded.length);
     this.allocate(encoded.length);
     this.buffer.set(encoded, this.buffer.length - encoded.length);
     return this;
