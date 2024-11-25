@@ -1,12 +1,12 @@
-import { NBT } from '@arthurita/nbt';
 import {
   ConfigurationClientboundFinishConfigurationPacket,
+  ConfigurationClientboundRegistryDataPacket,
   ConfigurationServerboundAcknowledgeFinishConfigurationPacket,
   ConfigurationServerboundClientInformationPacket,
   ConfigurationServerboundKnownPacksPacket,
   ConfigurationServerboundPluginMessagePacket,
-  Packet,
-  PlayClientboundLoginPacket
+  PlayClientboundLoginPacket,
+  PlayClientboundSyncPlayerPosPacket
 } from '@arthurita/packets';
 import { Protocol } from '@arthurita/packets/src/utils/packets';
 import { getCachedRegistries } from '@arthurita/registry';
@@ -73,56 +73,36 @@ export function handleConfigurationPackets({ player, packet }: HandleIncomingPac
       });
       player.sendPacket(loginPlacket);
 
-      const syncPlayerPosPacket = new Packet({ id: 0x42 });
-      syncPlayerPosPacket.putVarInt(1024); // teleport id
-      syncPlayerPosPacket.putDouble(1); // x
-      syncPlayerPosPacket.putDouble(2); // y
-      syncPlayerPosPacket.putDouble(3); // z
-
-      syncPlayerPosPacket.putDouble(0); // velocity x
-      syncPlayerPosPacket.putDouble(0); // velocity y
-      syncPlayerPosPacket.putDouble(0); // velocity z
-
-      syncPlayerPosPacket.putFloat(1); //yaw
-      syncPlayerPosPacket.putFloat(1); // pitch
-      syncPlayerPosPacket.putTeleportFlags({
-        relativePitch: false,
-        relativeYaw: false,
-        relativeVelocityX: false,
-        relativeX: false,
-        relativeY: false,
-        relativeZ: false,
-        relativeVelocityY: false,
-        relativeVelocityZ: false,
-        rotateVelocity: false
-      }); // teleport flags
+      const syncPlayerPosPacket = new PlayClientboundSyncPlayerPosPacket({
+        teleportId: 54548,
+        x: 1500,
+        y: 100,
+        z: 1500,
+        velocityX: 0,
+        velocityY: 0,
+        velocityZ: 0,
+        yaw: 0,
+        pitch: 0,
+        flags: {
+          relativeX: false,
+          relativeY: false,
+          relativeZ: false,
+          relativeYaw: false,
+          relativePitch: false,
+          relativeVelocityX: false,
+          relativeVelocityY: false,
+          relativeVelocityZ: false,
+          rotateVelocity: false
+        }
+      });
       player.sendPacket(syncPlayerPosPacket);
+
       break;
     }
     case Protocol.Configuration.Serverbound.KnownPacks.Id: {
       new ConfigurationServerboundKnownPacksPacket(packet.buffer);
 
-      // send registries
-      for (const registry of getCachedRegistries()) {
-        const registryPacket = new Packet({ id: 0x07 });
-
-        registryPacket.putString(registry.registryId);
-        registryPacket.putVarInt(registry.entries.length);
-
-        for (const entry of registry.entries) {
-          registryPacket.putString(entry.entryId);
-
-          if (entry.data instanceof NBT) {
-            registryPacket.putBoolean(true);
-            registryPacket.putBuffer(entry.data.networkBuffer);
-            continue;
-          }
-
-          registryPacket.putBoolean(false);
-        }
-
-        player.sendPacket(registryPacket);
-      }
+      for (const registry of getCachedRegistries()) player.sendPacket(new ConfigurationClientboundRegistryDataPacket(registry));
 
       const finishConfigurationPacket = new ConfigurationClientboundFinishConfigurationPacket();
       player.sendPacket(finishConfigurationPacket);

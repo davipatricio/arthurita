@@ -201,6 +201,10 @@ export namespace Protocol {
       Login: {
         Id: 0x2c,
         Resource: 'login'
+      },
+      SynchronizePlayerPosition: {
+        Id: 0x42,
+        Resource: 'player_position'
       }
     }
   };
