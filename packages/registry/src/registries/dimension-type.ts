@@ -1,4 +1,4 @@
-import { NBTTagType, WritableNBT, type AllNBTTags } from '@arthurita/nbt';
+import { type AllNBTTags, NBTTagType, WritableNBT } from '@arthurita/nbt';
 import dimensionTypeRegistry from '#assets/dimension-types.json';
 import type { CachedEntries } from '../types';
 

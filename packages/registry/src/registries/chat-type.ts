@@ -1,6 +1,6 @@
-import { NBTTagType, WritableNBT, type AllNBTTags, type NBTTagCompound } from '@arthurita/nbt';
-import type { CachedEntries } from '../types';
+import { type AllNBTTags, type NBTTagCompound, NBTTagType, WritableNBT } from '@arthurita/nbt';
 import chatTypeRegistry from '#assets/chat-type.json';
+import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
 

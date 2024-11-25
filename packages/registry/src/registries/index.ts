@@ -1,14 +1,14 @@
 import type { CachedEntries } from '../types';
 
+import { ArmorTrimMaterial } from './armor-trim-material';
+import { ArmorTrimPattern } from './armor-trim-pattern';
 import { BannerPattern } from './banner-pattern';
 import { Biome } from './biome';
-import { DimensionType } from './dimension-type';
-import { DamageType } from './damage-type';
-import { WolfVariant } from './wolf-variant';
-import { PaintingVariant } from './painting-variant';
-import { ArmorTrimPattern } from './armor-trim-pattern';
-import { ArmorTrimMaterial } from './armor-trim-material';
 import { ChatType } from './chat-type';
+import { DamageType } from './damage-type';
+import { DimensionType } from './dimension-type';
+import { PaintingVariant } from './painting-variant';
+import { WolfVariant } from './wolf-variant';
 
 type AllRegistryIds =
   | typeof Biome.Identifier

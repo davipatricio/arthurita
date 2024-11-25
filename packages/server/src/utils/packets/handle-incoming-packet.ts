@@ -17,8 +17,8 @@ import {
   StatusClientboundPongResponsePacket,
   StatusClientboundStatusResponsePacket
 } from '@arthurita/packets';
-import { type Player, PlayerState } from '#structures/Player';
 import { cachedRegistries } from '@arthurita/registry';
+import { type Player, PlayerState } from '#structures/Player';
 
 interface HandleIncomingPacketOptions {
   player: Player;

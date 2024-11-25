@@ -1,6 +1,6 @@
-import { NBTTagType, WritableNBT, type AllNBTTags } from '@arthurita/nbt';
-import type { CachedEntries } from '../types';
+import { type AllNBTTags, NBTTagType, WritableNBT } from '@arthurita/nbt';
 import wolfVariantRegistry from '#assets/wolf-variants.json';
+import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
 
