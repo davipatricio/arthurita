@@ -1,4 +1,5 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 export class HandshakingServerboundHandshakePacket extends Packet {
   public protocol: number;
@@ -7,7 +8,7 @@ export class HandshakingServerboundHandshakePacket extends Packet {
   public nextState: number;
 
   constructor(data: Buffer) {
-    super({ id: 0x00, data });
+    super({ id: Protocol.Handshaking.Serverbound.Handshake.Id, data });
 
     this.deserialize();
   }

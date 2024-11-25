@@ -1,4 +1,5 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 export class ConfigurationServerboundClientInformationPacket extends Packet {
   public locale: string;
@@ -11,7 +12,7 @@ export class ConfigurationServerboundClientInformationPacket extends Packet {
   public allowServerListings: boolean;
 
   constructor(data: Buffer) {
-    super({ id: 0x02, data });
+    super({ id: Protocol.Configuration.Serverbound.ClientInformation.Id, data });
 
     this.deserialize();
   }

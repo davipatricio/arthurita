@@ -16,7 +16,8 @@
     "directory": "packages/packets"
   },
   "imports": {
-    "#structures/*": "./src/structures/*.ts"
+    "#structures/*": "./src/structures/*.ts",
+    "#utils/*": "./src/utils/*.ts"
   },
   "dependencies": {
     "@arthurita/encoding": "workspace:*",

@@ -1,4 +1,5 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 interface StatusClientboundStatusResponsePacketPayload {
   version: {
@@ -20,7 +21,7 @@ interface StatusClientboundStatusResponsePacketPayload {
 
 export class StatusClientboundStatusResponsePacket extends Packet {
   constructor(payload?: StatusClientboundStatusResponsePacketPayload) {
-    super({ id: 0x00 });
+    super({ id: Protocol.Status.Clientbound.StatusResponse.Id });
 
     if (payload) this.serialize(payload);
   }

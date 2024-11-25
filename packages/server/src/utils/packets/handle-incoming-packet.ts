@@ -9,14 +9,15 @@ import {
   ConfigurationServerboundKnownPacksPacket,
   ConfigurationServerboundPluginMessagePacket,
   HandshakingServerboundHandshakePacket,
-  HandshakingServerboundPingRequestPacket,
   LoginClientboundLoginSuccessPacket,
   LoginServerboundLoginStartPacket,
   Packet,
   PlayClientboundLoginPacket,
   StatusClientboundPongResponsePacket,
-  StatusClientboundStatusResponsePacket
+  StatusClientboundStatusResponsePacket,
+  StatusServerboundPingRequestPacket
 } from '@arthurita/packets';
+import { Protocol } from '@arthurita/packets/src/utils/packets';
 import { getCachedRegistries } from '@arthurita/registry';
 import { type Player, PlayerState } from '#structures/Player';
 
@@ -51,7 +52,7 @@ export function handleIncomingPacket({ player, packet }: HandleIncomingPacketOpt
 
 function handleHandshakingPackets({ player, packet }: HandleIncomingPacketOptions) {
   switch (packet.id) {
-    case 0x00: {
+    case Protocol.Handshaking.Serverbound.Handshake.Id: {
       const pkt = new HandshakingServerboundHandshakePacket(packet.buffer);
       player.metadata.client.protocol = pkt.protocol;
       player.setState(pkt.nextState);
@@ -62,7 +63,7 @@ function handleHandshakingPackets({ player, packet }: HandleIncomingPacketOption
 
 function handleStatusPackets({ player, packet }: HandleIncomingPacketOptions) {
   switch (packet.id) {
-    case 0x00: {
+    case Protocol.Status.Serverbound.StatusRequest.Id: {
       const pkt = new StatusClientboundStatusResponsePacket({
         version: {
           name: '1.21.3',
@@ -82,10 +83,11 @@ function handleStatusPackets({ player, packet }: HandleIncomingPacketOptions) {
       break;
     }
 
-    case 0x01: {
-      const received = new HandshakingServerboundPingRequestPacket(packet.buffer);
-      const pkt = new StatusClientboundPongResponsePacket({ timestamp: received.timestamp });
-      player.sendPacket(pkt);
+    case Protocol.Status.Serverbound.PingRequest.Id: {
+      const pingRequestPacket = new StatusServerboundPingRequestPacket(packet.buffer);
+      const pongResponsePacket = new StatusClientboundPongResponsePacket({ timestamp: pingRequestPacket.timestamp });
+
+      player.sendPacket(pongResponsePacket);
       player.socket.end();
       break;
     }
@@ -94,8 +96,9 @@ function handleStatusPackets({ player, packet }: HandleIncomingPacketOptions) {
 
 function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOptions) {
   switch (packet.id) {
-    case 0x00: {
+    case Protocol.Configuration.Serverbound.ClientInformation.Id: {
       const clientInformationPacket = new ConfigurationServerboundClientInformationPacket(packet.buffer);
+
       player.metadata.client.locale = clientInformationPacket.locale;
       player.metadata.client.viewDistance = clientInformationPacket.viewDistance;
       player.metadata.client.chatMode = clientInformationPacket.chatMode;
@@ -107,7 +110,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       break;
     }
 
-    case 0x02: {
+    case Protocol.Configuration.Serverbound.PluginMessage.Id: {
       const configPluginMessagePacket = new ConfigurationServerboundPluginMessagePacket(packet.buffer);
 
       if (configPluginMessagePacket.channel === 'minecraft:brand') {
@@ -117,7 +120,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
 
       break;
     }
-    case 0x03: {
+    case Protocol.Configuration.Serverbound.AcknowledgeFinishConfiguration.Id: {
       new ConfigurationServerboundAcknowledgeFinishConfigurationPacket(packet.buffer);
       player.setState(PlayerState.Play);
 
@@ -177,7 +180,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       player.sendPacket(syncPlayerPosPacket);
       break;
     }
-    case 0x07: {
+    case Protocol.Configuration.Serverbound.KnownPacks.Id: {
       new ConfigurationServerboundKnownPacksPacket(packet.buffer);
 
       // send registries
@@ -211,7 +214,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
 
 function handleLoginPackets({ player, packet }: HandleIncomingPacketOptions) {
   switch (packet.id) {
-    case 0x00: {
+    case Protocol.Login.Serverbound.LoginStart.Id: {
       const loginStartPacket = new LoginServerboundLoginStartPacket(packet.buffer);
       player.username = loginStartPacket.username;
       player.uuid = loginStartPacket.uuid;
@@ -224,7 +227,7 @@ function handleLoginPackets({ player, packet }: HandleIncomingPacketOptions) {
       break;
     }
 
-    case 0x03: {
+    case Protocol.Login.Serverbound.PluginResponse.Id: {
       player.setState(PlayerState.Configuration);
 
       const serverBrandPacket = new ConfigurationClientboundPluginMessagePacket({

@@ -1,4 +1,5 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 interface StatusClientboundPongResponsePacketPayload {
   timestamp: bigint;
@@ -6,7 +7,7 @@ interface StatusClientboundPongResponsePacketPayload {
 
 export class StatusClientboundPongResponsePacket extends Packet {
   constructor(payload?: StatusClientboundPongResponsePacketPayload) {
-    super({ id: 0x01 });
+    super({ id: Protocol.Status.Clientbound.PongResponse.Id });
 
     if (payload) this.serialize(payload);
   }

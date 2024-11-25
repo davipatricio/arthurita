@@ -1,4 +1,5 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 type ConfigurationClientboundKnownPacksPacketPayload = {
   namespace: string;
@@ -8,7 +9,7 @@ type ConfigurationClientboundKnownPacksPacketPayload = {
 
 export class ConfigurationClientboundKnownPacksPacket extends Packet {
   constructor(payload?: ConfigurationClientboundKnownPacksPacketPayload) {
-    super({ id: 0x0e });
+    super({ id: Protocol.Configuration.Clientbound.KnownPacks.Id });
 
     if (payload) this.serialize(payload);
   }

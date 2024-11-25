@@ -1,4 +1,5 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 interface PlayClientboundLoginPacketPayload {
   entityId: number;
@@ -31,7 +32,7 @@ interface PlayClientboundLoginPacketPayload {
 
 export class PlayClientboundLoginPacket extends Packet {
   constructor(payload?: PlayClientboundLoginPacketPayload) {
-    super({ id: 0x2c });
+    super({ id: Protocol.Play.Clientbound.Login.Id });
 
     if (payload) this.serialize(payload);
   }

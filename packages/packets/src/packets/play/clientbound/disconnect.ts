@@ -1,5 +1,6 @@
 import { NBTTagType, WritableNBT } from '@arthurita/nbt';
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 interface PlayClientboundDisconnectPacketPayload {
   reason: string;
@@ -7,7 +8,7 @@ interface PlayClientboundDisconnectPacketPayload {
 
 export class PlayClientboundDisconnectPacket extends Packet {
   constructor(payload?: PlayClientboundDisconnectPacketPayload) {
-    super({ id: 0x1d });
+    super({ id: Protocol.Play.Clientbound.Disconnect.Id });
 
     if (payload) this.serialize(payload);
   }

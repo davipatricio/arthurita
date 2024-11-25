@@ -1,11 +1,12 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 export class LoginServerboundLoginStartPacket extends Packet {
   public username: string;
   public uuid: string;
 
   constructor(data: Buffer) {
-    super({ id: 0x00, data });
+    super({ id: Protocol.Login.Serverbound.LoginStart.Id, data });
 
     this.deserialize();
   }

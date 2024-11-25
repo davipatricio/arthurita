@@ -1,4 +1,5 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 interface ConfigurationClientboundPluginMessagePacketPayload {
   channel: string;
@@ -7,7 +8,7 @@ interface ConfigurationClientboundPluginMessagePacketPayload {
 
 export class ConfigurationClientboundPluginMessagePacket extends Packet {
   constructor(payload?: ConfigurationClientboundPluginMessagePacketPayload) {
-    super({ id: 0x01 });
+    super({ id: Protocol.Configuration.Clientbound.PluginMessage.Id });
 
     if (payload) this.serialize(payload);
   }

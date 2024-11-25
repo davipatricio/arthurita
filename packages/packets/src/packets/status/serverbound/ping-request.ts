@@ -1,10 +1,11 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
-export class HandshakingServerboundPingRequestPacket extends Packet {
+export class StatusServerboundPingRequestPacket extends Packet {
   public timestamp: bigint;
 
   constructor(data: Buffer) {
-    super({ id: 0x01, data });
+    super({ id: Protocol.Status.Serverbound.PingRequest.Id, data });
 
     this.deserialize();
   }

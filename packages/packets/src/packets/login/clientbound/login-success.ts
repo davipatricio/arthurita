@@ -1,4 +1,5 @@
 import { Packet } from '#structures/Packet';
+import { Protocol } from '#utils/packets';
 
 interface LoginClientboundLoginSuccessPacketPayload {
   username: string;
@@ -7,7 +8,7 @@ interface LoginClientboundLoginSuccessPacketPayload {
 
 export class LoginClientboundLoginSuccessPacket extends Packet {
   constructor(payload?: LoginClientboundLoginSuccessPacketPayload) {
-    super({ id: 0x02 });
+    super({ id: Protocol.Login.Clientbound.LoginSuccess.Id });
 
     if (payload) this.serialize(payload);
   }
