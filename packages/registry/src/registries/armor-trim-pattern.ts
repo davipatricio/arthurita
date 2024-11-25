@@ -1,5 +1,5 @@
 import { type AllNBTTags, NBTTagType, WritableNBT } from '@arthurita/nbt';
-import armorTrimPatternRegistry from '#assets/armor-trim-pattern.json';
+import registryData from '#assets/registry-data.json';
 import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
@@ -21,7 +21,7 @@ export namespace ArmorTrimPattern {
   export function entries() {
     if (cached) return cached;
 
-    cached = Object.entries(armorTrimPatternRegistry[Identifier]).map(([key, value]) => ({
+    cached = Object.entries(registryData[Identifier]).map(([key, value]) => ({
       entryId: key,
       data: ArmorTrimPattern.create(value)
     }));

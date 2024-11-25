@@ -19,7 +19,7 @@ export class Packet extends WritableByteBuffer {
     payloadBuffer.putVarInt(dataBuffer.buffer.length);
     payloadBuffer.putBuffer(dataBuffer.buffer);
 
-    return payloadBuffer.buffer;
+    return new Uint8Array(payloadBuffer.buffer);
   }
 
   public static from(buf: Buffer) {

@@ -17,7 +17,7 @@ import {
   StatusClientboundPongResponsePacket,
   StatusClientboundStatusResponsePacket
 } from '@arthurita/packets';
-import { cachedRegistries } from '@arthurita/registry';
+import { getCachedRegistries } from '@arthurita/registry';
 import { type Player, PlayerState } from '#structures/Player';
 
 interface HandleIncomingPacketOptions {
@@ -44,7 +44,6 @@ export function handleIncomingPacket({ player, packet }: HandleIncomingPacketOpt
       break;
     }
     case PlayerState.Play: {
-      console.log('Play state');
       break;
     }
   }
@@ -54,6 +53,7 @@ function handleHandshakingPackets({ player, packet }: HandleIncomingPacketOption
   switch (packet.id) {
     case 0x00: {
       const pkt = new HandshakingServerboundHandshakePacket(packet.buffer);
+      player.metadata.client.protocol = pkt.protocol;
       player.setState(pkt.nextState);
       break;
     }
@@ -181,7 +181,7 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
       new ConfigurationServerboundKnownPacksPacket(packet.buffer);
 
       // send registries
-      for (const registry of cachedRegistries) {
+      for (const registry of getCachedRegistries()) {
         const registryPacket = new Packet({ id: 0x07 });
 
         registryPacket.putString(registry.registryId);

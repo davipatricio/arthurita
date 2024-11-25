@@ -1,5 +1,5 @@
 import { type AllNBTTags, NBTTagType, WritableNBT } from '@arthurita/nbt';
-import damageTypeRegistry from '#assets/damage-types.json';
+import registryData from '#assets/registry-data.json';
 import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
@@ -18,7 +18,7 @@ export namespace DamageType {
   export function entries() {
     if (cached) return cached;
 
-    cached = Object.entries(damageTypeRegistry[Identifier]).map(([key, value]) => ({
+    cached = Object.entries(registryData[Identifier]).map(([key, value]) => ({
       entryId: key,
       data: DamageType.create(value)
     }));

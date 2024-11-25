@@ -1,28 +1,17 @@
 import { type AllNBTTags, type NBTTagCompound, NBTTagType, WritableNBT } from '@arthurita/nbt';
-import chatTypeRegistry from '#assets/chat-type.json';
+import registryData from '#assets/registry-data.json';
 import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
 
 export namespace ChatType {
   export const Identifier = 'minecraft:chat_type' as const;
-  // chat	Compound Tag	The chat decoration.	See Decoration.
-  // narration	Compound Tag	The narration decoration.
+
   export interface Payload {
     chat: Decoration;
     narration: Omit<Decoration, 'style'>;
   }
 
-  // Name	Type	Meaning	Values
-  // translation_key	String Tag	The translation key representing the chat format. It can also be a formatting string directly.	Example: "chat.type.text", which translates to "<%s> %s".
-  // style	Optional Compound Tag	Optional styling to be applied on the final message.
-  // Not present in the narration decoration.
-
-  // See Text formatting#Styling fields.
-  // parameters	List Tag of String Tag	Placeholders used when formatting the string given by the translation_key field.	Can be either:
-  // sender, for the name of the player sending the message.
-  // target, for the name of the player receiving the message, which may be empty.
-  // content, for the actual message.
   export interface Decoration {
     translation_key: string;
     style?: Style;
@@ -65,7 +54,7 @@ export namespace ChatType {
   export function entries() {
     if (cached) return cached;
 
-    cached = Object.entries(chatTypeRegistry[Identifier]).map(([key, value]) => ({
+    cached = Object.entries(registryData[Identifier]).map(([key, value]) => ({
       entryId: key,
       data: ChatType.create(value)
     }));

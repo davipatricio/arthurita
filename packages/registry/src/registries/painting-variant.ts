@@ -1,5 +1,5 @@
 import { type AllNBTTags, NBTTagType, WritableNBT } from '@arthurita/nbt';
-import paintingVariantRegistry from '#assets/painting-variants.json';
+import registryData from '#assets/registry-data.json';
 import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
@@ -16,7 +16,7 @@ export namespace PaintingVariant {
   export function entries() {
     if (cached) return cached;
 
-    cached = Object.entries(paintingVariantRegistry[Identifier]).map(([key, value]) => ({
+    cached = Object.entries(registryData[Identifier]).map(([key, value]) => ({
       entryId: key,
       data: PaintingVariant.create(value)
     }));

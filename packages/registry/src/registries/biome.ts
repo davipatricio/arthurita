@@ -1,5 +1,5 @@
 import { type AllNBTTags, type NBTTagCompound, NBTTagType, WritableNBT } from '@arthurita/nbt';
-import biomesRegistry from '#assets/biomes.json';
+import registryData from '#assets/registry-data.json';
 import type { CachedEntries } from '../types';
 
 let cached: CachedEntries | null = null;
@@ -59,7 +59,7 @@ export namespace Biome {
   export function entries() {
     if (cached) return cached;
 
-    cached = Object.entries(biomesRegistry[Identifier]).map(([key, value]) => ({
+    cached = Object.entries(registryData[Identifier]).map(([key, value]) => ({
       entryId: key,
       data: Biome.create(value)
     }));

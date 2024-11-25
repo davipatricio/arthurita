@@ -26,41 +26,49 @@ interface CachedRegistry {
   entries: CachedEntries;
 }
 
-export const cachedRegistries: CachedRegistry[] = [
-  {
-    registryId: Biome.Identifier,
-    entries: Biome.entries()
-  },
-  {
-    registryId: DimensionType.Identifier,
-    entries: DimensionType.entries()
-  },
-  {
-    registryId: DamageType.Identifier,
-    entries: DamageType.entries()
-  },
-  {
-    registryId: WolfVariant.Identifier,
-    entries: WolfVariant.entries()
-  },
-  {
-    registryId: PaintingVariant.Identifier,
-    entries: PaintingVariant.entries()
-  },
-  {
-    registryId: BannerPattern.Identifier,
-    entries: BannerPattern.entries()
-  },
-  {
-    registryId: ArmorTrimPattern.Identifier,
-    entries: ArmorTrimPattern.entries()
-  },
-  {
-    registryId: ArmorTrimMaterial.Identifier,
-    entries: ArmorTrimMaterial.entries()
-  },
-  {
-    registryId: ChatType.Identifier,
-    entries: ChatType.entries()
-  }
-];
+let cachedRegistries: CachedRegistry[] = [];
+
+export function getCachedRegistries() {
+  if (cachedRegistries.length) return cachedRegistries;
+
+  cachedRegistries = [
+    {
+      registryId: Biome.Identifier,
+      entries: Biome.entries()
+    },
+    {
+      registryId: DimensionType.Identifier,
+      entries: DimensionType.entries()
+    },
+    {
+      registryId: DamageType.Identifier,
+      entries: DamageType.entries()
+    },
+    {
+      registryId: WolfVariant.Identifier,
+      entries: WolfVariant.entries()
+    },
+    {
+      registryId: PaintingVariant.Identifier,
+      entries: PaintingVariant.entries()
+    },
+    {
+      registryId: BannerPattern.Identifier,
+      entries: BannerPattern.entries()
+    },
+    {
+      registryId: ArmorTrimPattern.Identifier,
+      entries: ArmorTrimPattern.entries()
+    },
+    {
+      registryId: ArmorTrimMaterial.Identifier,
+      entries: ArmorTrimMaterial.entries()
+    },
+    {
+      registryId: ChatType.Identifier,
+      entries: ChatType.entries()
+    }
+  ];
+
+  return cachedRegistries;
+}
