@@ -1,6 +1,6 @@
+import { NBT } from '@arthurita/nbt';
 import { Packet } from '#structures/Packet';
 import { Protocol } from '#utils/packets';
-import { NBT } from '@arthurita/nbt';
 
 interface ConfigurationClientboundRegistryDataPacketPayload {
   registryId: string;
