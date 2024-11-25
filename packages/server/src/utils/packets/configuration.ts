@@ -1,100 +1,19 @@
-import { WritableByteBuffer } from '@arthurita/encoding';
 import { NBT } from '@arthurita/nbt';
 import {
   ConfigurationClientboundFinishConfigurationPacket,
-  ConfigurationClientboundKnownPacksPacket,
-  ConfigurationClientboundPluginMessagePacket,
   ConfigurationServerboundAcknowledgeFinishConfigurationPacket,
   ConfigurationServerboundClientInformationPacket,
   ConfigurationServerboundKnownPacksPacket,
   ConfigurationServerboundPluginMessagePacket,
-  HandshakingServerboundHandshakePacket,
-  LoginClientboundLoginSuccessPacket,
-  LoginServerboundLoginStartPacket,
   Packet,
-  PlayClientboundLoginPacket,
-  StatusClientboundPongResponsePacket,
-  StatusClientboundStatusResponsePacket,
-  StatusServerboundPingRequestPacket
+  PlayClientboundLoginPacket
 } from '@arthurita/packets';
 import { Protocol } from '@arthurita/packets/src/utils/packets';
 import { getCachedRegistries } from '@arthurita/registry';
-import { type Player, PlayerState } from '#structures/Player';
+import { PlayerState } from '#structures/Player';
+import type { HandleIncomingPacketOptions } from './handle-incoming';
 
-interface HandleIncomingPacketOptions {
-  player: Player;
-  packet: Packet;
-}
-
-export function handleIncomingPacket({ player, packet }: HandleIncomingPacketOptions) {
-  switch (player.state) {
-    case PlayerState.Handshaking: {
-      handleHandshakingPackets({ player, packet });
-      break;
-    }
-    case PlayerState.Status: {
-      handleStatusPackets({ player, packet });
-      break;
-    }
-    case PlayerState.Configuration: {
-      handleConfigurationPackets({ player, packet });
-      break;
-    }
-    case PlayerState.Login: {
-      handleLoginPackets({ player, packet });
-      break;
-    }
-    case PlayerState.Play: {
-      break;
-    }
-  }
-}
-
-function handleHandshakingPackets({ player, packet }: HandleIncomingPacketOptions) {
-  switch (packet.id) {
-    case Protocol.Handshaking.Serverbound.Handshake.Id: {
-      const pkt = new HandshakingServerboundHandshakePacket(packet.buffer);
-      player.metadata.client.protocol = pkt.protocol;
-      player.setState(pkt.nextState);
-      break;
-    }
-  }
-}
-
-function handleStatusPackets({ player, packet }: HandleIncomingPacketOptions) {
-  switch (packet.id) {
-    case Protocol.Status.Serverbound.StatusRequest.Id: {
-      const pkt = new StatusClientboundStatusResponsePacket({
-        version: {
-          name: '1.21.3',
-          protocol: 768
-        },
-        players: {
-          max: 2024,
-          online: 1,
-          sample: [{ name: 'thinkofdeath', id: 'a566329f-c907-48ee-8d71-d7ba5aa00d20' }]
-        },
-        description: {
-          text: 'Hello, world!'
-        }
-      });
-
-      player.sendPacket(pkt);
-      break;
-    }
-
-    case Protocol.Status.Serverbound.PingRequest.Id: {
-      const pingRequestPacket = new StatusServerboundPingRequestPacket(packet.buffer);
-      const pongResponsePacket = new StatusClientboundPongResponsePacket({ timestamp: pingRequestPacket.timestamp });
-
-      player.sendPacket(pongResponsePacket);
-      player.socket.end();
-      break;
-    }
-  }
-}
-
-function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOptions) {
+export function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOptions) {
   switch (packet.id) {
     case Protocol.Configuration.Serverbound.ClientInformation.Id: {
       const clientInformationPacket = new ConfigurationServerboundClientInformationPacket(packet.buffer);
@@ -207,40 +126,6 @@ function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOpti
 
       const finishConfigurationPacket = new ConfigurationClientboundFinishConfigurationPacket();
       player.sendPacket(finishConfigurationPacket);
-      break;
-    }
-  }
-}
-
-function handleLoginPackets({ player, packet }: HandleIncomingPacketOptions) {
-  switch (packet.id) {
-    case Protocol.Login.Serverbound.LoginStart.Id: {
-      const loginStartPacket = new LoginServerboundLoginStartPacket(packet.buffer);
-      player.username = loginStartPacket.username;
-      player.uuid = loginStartPacket.uuid;
-
-      const loginSuccessPacket = new LoginClientboundLoginSuccessPacket({
-        username: player.username,
-        uuid: player.uuid
-      });
-      player.sendPacket(loginSuccessPacket);
-      break;
-    }
-
-    case Protocol.Login.Serverbound.PluginResponse.Id: {
-      player.setState(PlayerState.Configuration);
-
-      const serverBrandPacket = new ConfigurationClientboundPluginMessagePacket({
-        channel: 'minecraft:brand',
-        data: new WritableByteBuffer().putString('arthurita|development').buffer
-      });
-      player.sendPacket(serverBrandPacket);
-
-      const knownPackets = new ConfigurationClientboundKnownPacksPacket([
-        { namespace: 'minecraft', id: 'core', version: '1.21.3' },
-        { namespace: 'minecraft', id: 'core', version: '1.21.2' }
-      ]);
-      player.sendPacket(knownPackets);
       break;
     }
   }

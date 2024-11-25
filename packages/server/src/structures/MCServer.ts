@@ -1,6 +1,6 @@
 import { Server } from 'node:net';
 import { Packet } from '@arthurita/packets';
-import { handleIncomingPacket } from '#utils/packets/handle-incoming-packet';
+import { handleIncomingPacket } from '#utils/packets/handle-incoming';
 import { Player } from './Player';
 
 interface MCServerOptions {
