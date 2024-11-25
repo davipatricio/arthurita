@@ -63,7 +63,8 @@ export class WritableNBT extends NBT {
         this.putLongArray(tag.payload);
         break;
       default:
-        throw new Error('Unknown NBT type');
+        // @ts-expect-error
+        throw new Error(`Unknown NBT type: ${tag.type}`);
     }
   }
 

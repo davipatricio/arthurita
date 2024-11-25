@@ -1,6 +1,6 @@
-import { ByteBuffer } from '@arthurita/encoding';
+import { WritableByteBuffer } from '@arthurita/encoding';
 
-export class Packet extends ByteBuffer {
+export class Packet extends WritableByteBuffer {
   public id: number;
 
   constructor({ id, data }: { id: number; data?: Buffer }) {
@@ -9,18 +9,13 @@ export class Packet extends ByteBuffer {
     this.id = id;
   }
 
-  public setData(data: Buffer) {
-    this.buffer = data;
-    return this;
-  }
-
   public get payload() {
-    const dataBuffer = new ByteBuffer();
+    const dataBuffer = new WritableByteBuffer();
 
     dataBuffer.putVarInt(this.id);
     dataBuffer.putBuffer(this.buffer);
 
-    const payloadBuffer = new ByteBuffer();
+    const payloadBuffer = new WritableByteBuffer();
     payloadBuffer.putVarInt(dataBuffer.buffer.length);
     payloadBuffer.putBuffer(dataBuffer.buffer);
 
@@ -29,7 +24,7 @@ export class Packet extends ByteBuffer {
 
   public static from(buf: Buffer) {
     const packets: Packet[] = [];
-    const byteBuffer = new ByteBuffer(buf);
+    const byteBuffer = new WritableByteBuffer(buf);
 
     while (byteBuffer.buffer.length > 0) {
       const packetLength = byteBuffer.readVarInt();

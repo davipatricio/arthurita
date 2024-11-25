@@ -1,4 +1,4 @@
-import { ByteBuffer } from '@arthurita/encoding';
+import { WritableByteBuffer } from '@arthurita/encoding';
 import { NBT } from '@arthurita/nbt';
 import {
   ConfigurationClientboundFinishConfigurationPacket,
@@ -229,7 +229,7 @@ function handleLoginPackets({ player, packet }: HandleIncomingPacketOptions) {
 
       const serverBrandPacket = new ConfigurationClientboundPluginMessagePacket({
         channel: 'minecraft:brand',
-        data: new ByteBuffer().putString('arthurita|development').buffer
+        data: new WritableByteBuffer().putString('arthurita|development').buffer
       });
       player.sendPacket(serverBrandPacket);
 

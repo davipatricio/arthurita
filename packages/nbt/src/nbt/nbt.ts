@@ -1,8 +1,12 @@
-import { ByteBuffer } from '@arthurita/encoding';
+import { WritableByteBuffer } from '@arthurita/encoding';
 
-export class NBT extends ByteBuffer {
+export class NBT extends WritableByteBuffer {
   get networkBuffer() {
-    // @ts-expect-error
-    return Buffer.concat([this.buffer.subarray(0, 1), this.buffer.subarray(3)]);
+    const dataBuffer = new WritableByteBuffer();
+
+    dataBuffer.putBuffer(this.buffer.subarray(0, 1));
+    dataBuffer.putBuffer(this.buffer.subarray(3));
+
+    return dataBuffer.buffer;
   }
 }
