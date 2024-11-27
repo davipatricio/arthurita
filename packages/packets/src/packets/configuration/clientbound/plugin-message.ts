@@ -1,5 +1,5 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 interface ConfigurationClientboundPluginMessagePacketPayload {
   channel: string;
@@ -8,7 +8,7 @@ interface ConfigurationClientboundPluginMessagePacketPayload {
 
 export class ConfigurationClientboundPluginMessagePacket extends Packet {
   constructor(payload?: ConfigurationClientboundPluginMessagePacketPayload) {
-    super({ id: Protocol.Configuration.Clientbound.PluginMessage.Id });
+    super({ id: Protocol.configuration.clientbound['minecraft:custom_payload'].protocol_id });
 
     if (payload) this.serialize(payload);
   }

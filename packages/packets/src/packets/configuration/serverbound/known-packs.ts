@@ -1,12 +1,12 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 export class ConfigurationServerboundKnownPacksPacket extends Packet {
   public knownPacksCount: number;
   public knownPacks: { namespace: string; id: string; version: string }[];
 
   constructor(data: Buffer) {
-    super({ id: Protocol.Configuration.Serverbound.KnownPacks.Id, data });
+    super({ id: Protocol.configuration.serverbound['minecraft:select_known_packs'].protocol_id, data });
 
     this.deserialize();
   }

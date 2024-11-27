@@ -1,6 +1,6 @@
 import { NBTTagType, WritableNBT } from '@arthurita/nbt';
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 interface PlayClientboundDisconnectPacketPayload {
   reason: string;
@@ -8,7 +8,7 @@ interface PlayClientboundDisconnectPacketPayload {
 
 export class PlayClientboundDisconnectPacket extends Packet {
   constructor(payload?: PlayClientboundDisconnectPacketPayload) {
-    super({ id: Protocol.Play.Clientbound.Disconnect.Id });
+    super({ id: Protocol.play.clientbound['minecraft:disconnect'].protocol_id });
 
     if (payload) this.serialize(payload);
   }

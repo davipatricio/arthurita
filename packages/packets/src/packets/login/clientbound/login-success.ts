@@ -1,5 +1,5 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 interface LoginClientboundLoginSuccessPacketPayload {
   username: string;
@@ -8,7 +8,7 @@ interface LoginClientboundLoginSuccessPacketPayload {
 
 export class LoginClientboundLoginSuccessPacket extends Packet {
   constructor(payload?: LoginClientboundLoginSuccessPacketPayload) {
-    super({ id: Protocol.Login.Clientbound.LoginSuccess.Id });
+    super({ id: Protocol.login.clientbound['minecraft:login_finished'].protocol_id });
 
     if (payload) this.serialize(payload);
   }

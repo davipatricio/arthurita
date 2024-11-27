@@ -1,12 +1,12 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 export class LoginServerboundLoginStartPacket extends Packet {
   public username: string;
   public uuid: string;
 
   constructor(data: Buffer) {
-    super({ id: Protocol.Login.Serverbound.LoginStart.Id, data });
+    super({ id: Protocol.login.serverbound['minecraft:hello'].protocol_id, data });
 
     this.deserialize();
   }

@@ -1,5 +1,5 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 export class ConfigurationServerboundClientInformationPacket extends Packet {
   public locale: string;
@@ -12,7 +12,7 @@ export class ConfigurationServerboundClientInformationPacket extends Packet {
   public allowServerListings: boolean;
 
   constructor(data: Buffer) {
-    super({ id: Protocol.Configuration.Serverbound.ClientInformation.Id, data });
+    super({ id: Protocol.configuration.serverbound['minecraft:client_information'].protocol_id, data });
 
     this.deserialize();
   }

@@ -1,21 +1,28 @@
 import {
   ConfigurationClientboundFinishConfigurationPacket,
   ConfigurationClientboundRegistryDataPacket,
-  ConfigurationServerboundAcknowledgeFinishConfigurationPacket,
   ConfigurationServerboundClientInformationPacket,
+  ConfigurationServerboundFinishConfigurationPacket,
   ConfigurationServerboundKnownPacksPacket,
   ConfigurationServerboundPluginMessagePacket,
+  Packet,
   PlayClientboundLoginPacket,
   PlayClientboundSyncPlayerPosPacket
 } from '@arthurita/packets';
-import { Protocol } from '@arthurita/packets/src/utils/packets';
 import { getCachedRegistries } from '@arthurita/registry';
 import { PlayerState } from '#structures/Player';
 import type { HandleIncomingPacketOptions } from './handle-incoming';
+import Protocol from '@arthurita/packets/src/utils/packets';
+
+const configurationPackets = Protocol.configuration.serverbound;
+
+function getPacketId<T extends keyof typeof configurationPackets>(resource: T) {
+  return configurationPackets[resource as T].protocol_id;
+}
 
 export function handleConfigurationPackets({ player, packet }: HandleIncomingPacketOptions) {
   switch (packet.id) {
-    case Protocol.Configuration.Serverbound.ClientInformation.Id: {
+    case getPacketId('minecraft:client_information'): {
       const clientInformationPacket = new ConfigurationServerboundClientInformationPacket(packet.buffer);
 
       player.metadata.client.locale = clientInformationPacket.locale;
@@ -29,7 +36,7 @@ export function handleConfigurationPackets({ player, packet }: HandleIncomingPac
       break;
     }
 
-    case Protocol.Configuration.Serverbound.PluginMessage.Id: {
+    case getPacketId('minecraft:custom_payload'): {
       const configPluginMessagePacket = new ConfigurationServerboundPluginMessagePacket(packet.buffer);
 
       if (configPluginMessagePacket.channel === 'minecraft:brand') {
@@ -39,8 +46,8 @@ export function handleConfigurationPackets({ player, packet }: HandleIncomingPac
 
       break;
     }
-    case Protocol.Configuration.Serverbound.AcknowledgeFinishConfiguration.Id: {
-      new ConfigurationServerboundAcknowledgeFinishConfigurationPacket(packet.buffer);
+    case getPacketId('minecraft:finish_configuration'): {
+      new ConfigurationServerboundFinishConfigurationPacket(packet.buffer);
       player.setState(PlayerState.Play);
 
       const loginPlacket = new PlayClientboundLoginPacket({
@@ -49,7 +56,7 @@ export function handleConfigurationPackets({ player, packet }: HandleIncomingPac
         doLimitedCrafting: false,
         enableRespawnScreen: true,
         enforceSecureChat: false,
-        gameMode: 0,
+        gameMode: 1,
         hardcore: false,
         hasDeathLocation: false,
         deathDimensionName: 'minecraft:overworld',
@@ -76,7 +83,7 @@ export function handleConfigurationPackets({ player, packet }: HandleIncomingPac
       const syncPlayerPosPacket = new PlayClientboundSyncPlayerPosPacket({
         teleportId: 54548,
         x: 1500,
-        y: 100,
+        y: 500,
         z: 1500,
         velocityX: 0,
         velocityY: 0,
@@ -97,9 +104,24 @@ export function handleConfigurationPackets({ player, packet }: HandleIncomingPac
       });
       player.sendPacket(syncPlayerPosPacket);
 
+      // random uuid
+      const playerInfoUpdate = new Packet({ id: 0x40 })
+        .putByte(0x01)
+        .putVarInt(1)
+        .putUUID('00000000-0000-0000-0000-000000000000')
+        .putString('my name is')
+        .putVarInt(0);
+      player.sendPacket(playerInfoUpdate);
+
+      const gameEventTest = new Packet({ id: 0x23 }).putUnsignedByte(13).putFloat(0);
+      player.sendPacket(gameEventTest);
+
+      const centerChunkTest = new Packet({ id: 88 }).putVarInt(0).putVarInt(0);
+      player.sendPacket(centerChunkTest);
+
       break;
     }
-    case Protocol.Configuration.Serverbound.KnownPacks.Id: {
+    case getPacketId('minecraft:select_known_packs'): {
       new ConfigurationServerboundKnownPacksPacket(packet.buffer);
 
       for (const registry of getCachedRegistries()) player.sendPacket(new ConfigurationClientboundRegistryDataPacket(registry));

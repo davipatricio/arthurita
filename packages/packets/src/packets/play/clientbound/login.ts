@@ -1,5 +1,5 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 interface PlayClientboundLoginPacketPayload {
   entityId: number;
@@ -32,7 +32,7 @@ interface PlayClientboundLoginPacketPayload {
 
 export class PlayClientboundLoginPacket extends Packet {
   constructor(payload?: PlayClientboundLoginPacketPayload) {
-    super({ id: Protocol.Play.Clientbound.Login.Id });
+    super({ id: Protocol.play.clientbound['minecraft:login'].protocol_id });
 
     if (payload) this.serialize(payload);
   }

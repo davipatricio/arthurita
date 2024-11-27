@@ -16,6 +16,7 @@
     "directory": "packages/packets"
   },
   "imports": {
+    "#assets/*": "./src/assets/*.ts",
     "#structures/*": "./src/structures/*.ts",
     "#utils/*": "./src/utils/*.ts"
   },

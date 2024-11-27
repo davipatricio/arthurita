@@ -1,6 +1,6 @@
 import { NBT } from '@arthurita/nbt';
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 interface ConfigurationClientboundRegistryDataPacketPayload {
   registryId: string;
@@ -12,7 +12,7 @@ interface ConfigurationClientboundRegistryDataPacketPayload {
 
 export class ConfigurationClientboundRegistryDataPacket extends Packet {
   constructor(payload?: ConfigurationClientboundRegistryDataPacketPayload) {
-    super({ id: Protocol.Configuration.Clientbound.RegistryData.Id });
+    super({ id: Protocol.configuration.clientbound['minecraft:registry_data'].protocol_id });
 
     if (payload) this.serialize(payload);
   }

@@ -1,5 +1,5 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 interface PlayClientboundSyncPlayerPosPacketPayload {
   teleportId: number;
@@ -27,7 +27,7 @@ interface PlayClientboundSyncPlayerPosPacketPayload {
 
 export class PlayClientboundSyncPlayerPosPacket extends Packet {
   constructor(payload?: PlayClientboundSyncPlayerPosPacketPayload) {
-    super({ id: Protocol.Play.Clientbound.SynchronizePlayerPosition.Id });
+    super({ id: Protocol.play.clientbound['minecraft:player_position'].protocol_id });
 
     if (payload) this.serialize(payload);
   }

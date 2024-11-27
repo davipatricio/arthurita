@@ -1,8 +1,8 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 export class ConfigurationClientboundFinishConfigurationPacket extends Packet {
   constructor() {
-    super({ id: Protocol.Configuration.Clientbound.FinishConfiguration.Id });
+    super({ id: Protocol.configuration.clientbound['minecraft:finish_configuration'].protocol_id });
   }
 }

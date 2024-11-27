@@ -43,7 +43,7 @@ export class Player {
   public metadata: PlayerData;
   public state = PlayerState.Handshaking;
 
-  protected readonly heartbeater: PlayerHeartbeater;
+  protected readonly heartbeater = new PlayerHeartbeater(this);
 
   public constructor(public readonly socket: Socket) {
     this.username = `unknown-${randomBytes(10).toString('hex')}`;
@@ -51,8 +51,6 @@ export class Player {
     this.metadata = {
       client: {}
     };
-
-    this.heartbeater = new PlayerHeartbeater(this);
   }
 
   public sendPacket(packet: Packet) {
@@ -83,7 +81,7 @@ export class Player {
   }
 
   public setState(state: PlayerState) {
-    if (![PlayerState.Handshaking, PlayerState.Status, PlayerState.Login, PlayerState.Configuration, PlayerState.Play].includes(state)) {
+    if (state > PlayerState.Play || state < PlayerState.Handshaking) {
       throw new Error('Invalid player state');
     }
 

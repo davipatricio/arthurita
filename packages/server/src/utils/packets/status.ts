@@ -3,12 +3,18 @@ import {
   StatusClientboundStatusResponsePacket,
   StatusServerboundPingRequestPacket
 } from '@arthurita/packets';
-import { Protocol } from '@arthurita/packets/src/utils/packets';
 import type { HandleIncomingPacketOptions } from './handle-incoming';
+import Protocol from '@arthurita/packets/src/utils/packets';
+
+const statusPackets = Protocol.status.serverbound;
+
+function getPacketId<T extends keyof typeof statusPackets>(resource: T) {
+  return statusPackets[resource as T].protocol_id;
+}
 
 export function handleStatusPackets({ player, packet }: HandleIncomingPacketOptions) {
   switch (packet.id) {
-    case Protocol.Status.Serverbound.StatusRequest.Id: {
+    case getPacketId('minecraft:status_request'): {
       const pkt = new StatusClientboundStatusResponsePacket({
         version: {
           name: '1.21.3',
@@ -28,7 +34,7 @@ export function handleStatusPackets({ player, packet }: HandleIncomingPacketOpti
       break;
     }
 
-    case Protocol.Status.Serverbound.PingRequest.Id: {
+    case getPacketId('minecraft:ping_request'): {
       const pingRequestPacket = new StatusServerboundPingRequestPacket(packet.buffer);
       const pongResponsePacket = new StatusClientboundPongResponsePacket({ timestamp: pingRequestPacket.timestamp });
 

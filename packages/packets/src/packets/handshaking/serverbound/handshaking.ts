@@ -1,5 +1,5 @@
 import { Packet } from '#structures/Packet';
-import { Protocol } from '#utils/packets';
+import Protocol from '#utils/packets';
 
 export class HandshakingServerboundHandshakePacket extends Packet {
   public protocol: number;
@@ -8,7 +8,7 @@ export class HandshakingServerboundHandshakePacket extends Packet {
   public nextState: number;
 
   constructor(data: Buffer) {
-    super({ id: Protocol.Handshaking.Serverbound.Handshake.Id, data });
+    super({ id: Protocol.handshake.serverbound['minecraft:intention'].protocol_id, data });
 
     this.deserialize();
   }
