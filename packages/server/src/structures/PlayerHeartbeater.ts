@@ -1,13 +1,17 @@
-import { writeVarInt } from '@arthurita/encoding';
-import type { Player } from '..';
+import { Packet } from '@arthurita/packets';
+import type { Player } from './Player';
 
-export type HeartbeatStatus = 'ACKED' | 'SENT' | 'TIMEOUT';
+export enum HeartbeatStatus {
+  ACKED = 'ACKED',
+  SENT = 'SENT',
+  TIMEOUT = 'TIMEOUT'
+}
 
 export class PlayerHeartbeater {
   private _ackedTimer: Timer;
   private _interval: Timer;
   public sequence = 0;
-  public status = 'ACKED' as HeartbeatStatus;
+  public status = HeartbeatStatus.ACKED;
 
   constructor(public player: Player) {}
 
@@ -15,7 +19,7 @@ export class PlayerHeartbeater {
     this._interval = setInterval(() => {
       if (this.status !== 'ACKED') return;
 
-      if (this.player.socket.destroyed) {
+      if (this.player.socket.readyState !== 'open') {
         this.stop();
         return;
       }
@@ -24,26 +28,28 @@ export class PlayerHeartbeater {
 
       // close connection if keepalive is not acknowledged within 30 seconds
       this._ackedTimer = setTimeout(() => {
-        if (this.player.socket.destroyed) return;
+        if (this.player.socket.readyState !== 'open') return;
 
         if (this.status !== 'ACKED') {
           this.stop();
-          this.player.socket?.destroy();
+          this.player.socket.end();
         }
       }, 30000);
     }, 500);
   }
 
   sendHeartbeat() {
-    this.status = 'SENT';
+    this.status = HeartbeatStatus.SENT;
     this.sequence++;
 
-    const packetId = writeVarInt(0x00);
-    const keepAliveID = writeVarInt(this.sequence);
-    const packetLength = writeVarInt(packetId.length + keepAliveID.length);
-
     // TODO: create a proper packet
-    this.player.socket.write(Buffer.from([...packetLength, ...packetId, ...keepAliveID]));
+    const _temporaryKeepAlivePacket = new Packet({
+      id: 0x00
+    });
+
+    _temporaryKeepAlivePacket.putVarInt(this.sequence);
+
+    this.player.sendPacket(_temporaryKeepAlivePacket);
   }
 
   stop() {
@@ -52,7 +58,7 @@ export class PlayerHeartbeater {
   }
 
   ack() {
-    this.status = 'ACKED';
+    this.status = HeartbeatStatus.ACKED;
     clearTimeout(this._ackedTimer);
   }
 }

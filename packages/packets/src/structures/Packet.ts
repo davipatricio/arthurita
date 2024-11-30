@@ -1,0 +1,46 @@
+import { WritableByteBuffer } from '@arthurita/encoding';
+
+export class Packet extends WritableByteBuffer {
+  public id: number;
+
+  constructor({ id, data }: { id: number; data?: Buffer }) {
+    super(data ?? Buffer.alloc(0));
+
+    this.id = id;
+  }
+
+  public get payload() {
+    const dataBuffer = new WritableByteBuffer();
+
+    dataBuffer.putVarInt(this.id);
+    dataBuffer.putBuffer(this.buffer);
+
+    const payloadBuffer = new WritableByteBuffer();
+    payloadBuffer.putVarInt(dataBuffer.buffer.length);
+    payloadBuffer.putBuffer(dataBuffer.buffer);
+
+    return new Uint8Array(payloadBuffer.buffer);
+  }
+
+  public static from(buf: Buffer) {
+    const packets: Packet[] = [];
+    const byteBuffer = new WritableByteBuffer(buf);
+
+    while (byteBuffer.buffer.length > 0) {
+      const packetLength = byteBuffer.readVarInt();
+
+      const initialBufferLength = byteBuffer.buffer.length;
+      const packetId = byteBuffer.readVarInt();
+      const packetIdLength = initialBufferLength - byteBuffer.buffer.length;
+
+      const dataLength = packetLength - packetIdLength;
+      const packetData = byteBuffer.buffer.subarray(0, dataLength);
+      byteBuffer.advance(dataLength);
+
+      const packet = new Packet({ id: packetId, data: packetData });
+      packets.push(packet);
+    }
+
+    return packets;
+  }
+}

@@ -1,34 +1,54 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig.json",
   "compilerOptions": {
-    // General Options
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "remove",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "target": "ES2023",
-    "outDir": "dist",
-    // Strict Type-Checking Options
-    "strict": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": false,
-    // Additional Type-Checking Options
+    // Type Checking
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "strict": true,
+    // General Options
+    "allowJs": true,
+    "importsNotUsedAsValues": "remove",
+    "moduleDetection": "force",
+    // Strict Type-Checking Options
+    "verbatimModuleSyntax": true,
+    "strictPropertyInitialization": false,
+    // Modules
+    "allowArbitraryExtensions": false,
+    "allowImportingTsExtensions": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "resolvePackageJsonExports": true,
+    "resolvePackageJsonImports": true,
     // Building
-    "declaration": true,
-    "emitDeclarationOnly": true,
+    "noEmit": true,
     // Miscellaneous Options
-    "alwaysStrict": true,
     "removeComments": true,
     "skipDefaultLibCheck": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    // Interop Constraints
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    // Language and Environment
+    "experimentalDecorators": true,
+    "lib": [
+      "ESNext",
+      "esnext.disposable"
+    ],
+    "target": "ESNext",
+    "useDefineForClassFields": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -1,7 +1,11 @@
 import { randomBytes } from 'node:crypto';
 import type { Socket } from 'node:net';
-import { type PlayerSettingsChatMode, type UncompressedPacket, getVersionPackets } from '@arthurita/packets';
-import type { MCServer } from './MCServer';
+import {
+  ConfigurationClientboundDisconnectPacket,
+  LoginClientboundDisconnectPacket,
+  type Packet,
+  PlayClientboundDisconnectPacket
+} from '@arthurita/packets';
 import { PlayerHeartbeater } from './PlayerHeartbeater';
 
 export enum PlayerState {
@@ -12,37 +16,75 @@ export enum PlayerState {
   Play = 4
 }
 
+enum PlayerChatMode {
+  Enabled = 0,
+  CommandsOnly = 1,
+  Hidden = 2
+}
+
+interface PlayerData {
+  client: Partial<{
+    brand: string;
+    locale: string;
+    viewDistance: number;
+    chatMode: PlayerChatMode;
+    chatColors: boolean;
+    displayedSkinParts: number;
+    isCharacterRightHanded: boolean;
+    textFiltering: boolean;
+    allowServerList: boolean;
+    protocol: number;
+  }>;
+}
+
 export class Player {
-  public name: string;
+  public username: string;
+  public uuid: string;
+  public metadata: PlayerData;
   public state = PlayerState.Handshaking;
-  public version = -1;
 
-  // Fields below are only set if state is Playing
-  public locale: string;
-  public viewDistance: number;
-  public chatMode: PlayerSettingsChatMode;
-  public hasChatColors: boolean;
+  protected readonly heartbeater = new PlayerHeartbeater(this);
 
-  // Internal usage
-  public _heartbeater: PlayerHeartbeater;
-
-  constructor(
-    public socket: Socket,
-    public server: MCServer
-  ) {
-    this.name = `unknown-${randomBytes(10).toString('hex')}`;
-    this._heartbeater = new PlayerHeartbeater(this);
+  public constructor(public readonly socket: Socket) {
+    this.username = `unknown-${randomBytes(10).toString('hex')}`;
+    this.uuid = '00000000-0000-0000-0000-000000000000';
+    this.metadata = {
+      client: {}
+    };
   }
 
-  send(type: 'actionbar' | 'chatbox', message: string) {
-    const packets = getVersionPackets(this.version);
-    const chatMessagePacket = new packets.PlayClientboundChatMessagePacket(message, type);
-    this.sendPacket(chatMessagePacket);
+  public sendPacket(packet: Packet) {
+    this.socket.write(packet.payload);
   }
 
-  sendPacket(packet: UncompressedPacket) {
-    if (this.socket.destroyed) return;
+  public disconnect(reason: string) {
+    let packet = null;
 
-    this.socket.write(packet.toBuffer());
+    switch (this.state) {
+      case PlayerState.Login:
+        packet = new LoginClientboundDisconnectPacket({ reason });
+        break;
+      case PlayerState.Configuration:
+        packet = new ConfigurationClientboundDisconnectPacket({ reason });
+        break;
+      case PlayerState.Play:
+        packet = new PlayClientboundDisconnectPacket({ reason });
+        break;
+    }
+
+    if (packet == null) {
+      this.socket.end();
+      return;
+    }
+
+    this.sendPacket(packet);
+  }
+
+  public setState(state: PlayerState) {
+    if (state > PlayerState.Play || state < PlayerState.Handshaking) {
+      throw new Error('Invalid player state');
+    }
+
+    this.state = state;
   }
 }

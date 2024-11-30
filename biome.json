@@ -13,8 +13,7 @@
     "lineWidth": 140,
     "lineEnding": "lf",
     "indentWidth": 2,
-    "indentStyle": "space",
-    "formatWithErrors": true
+    "indentStyle": "space"
   },
   "javascript": {
     "formatter": {
@@ -38,7 +37,8 @@
         "noNegationElse": "error"
       },
       "correctness": {
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
       },
       "suspicious": {
         "noEmptyBlockStatements": "error"

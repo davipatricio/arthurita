@@ -1,36 +1,34 @@
 {
   "name": "@arthurita/packets",
+  "description": "Builders and utilities for Minecraft packets",
+  "author": "Davi Patricio <davipatricio@pm.me>",
   "version": "0.0.1",
-  "description": "",
+  "license": "MIT",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "build:declarations": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "build:files": "bun build src/index.ts --outdir dist --target node --packages external",
-    "build": "bun run build:declarations && bun run build:files",
     "lint": "biome check .",
-    "format": "biome check --write --unsafe .",
-    "test": "vitest run"
+    "format": "biome check --write --unsafe ."
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/davipatricio/arthurita.git",
     "directory": "packages/packets"
   },
-  "engines": {
-    "node": ">=20.0.0",
-    "pnpm": ">=8.0.0"
+  "imports": {
+    "#assets/*": "./src/assets/*.ts",
+    "#structures/*": "./src/structures/*.ts",
+    "#utils/*": "./src/utils/*.ts"
   },
-  "author": "Davi Patricio <davipatricio@pm.me>",
-  "license": "MIT",
-  "packageManager": "pnpm@9.1.0-0+sha256.c557b24d2298d9b5e3be7086ebf55a28253b008324d545f72645a6de89844102",
   "dependencies": {
-    "@arthurita/encoding": "workspace:^"
+    "@arthurita/encoding": "workspace:*",
+    "@arthurita/nbt": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.1-rc"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "@biomejs/biome": "^1.9.4",
+    "@types/bun": "^1.1.13"
   }
 }

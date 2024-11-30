@@ -1,22 +1,17 @@
 {
-  "name": "@arthurita/arthurita",
-  "version": "0.0.0",
-  "private": true,
-  "description": "",
+  "name": "arthurita-new",
+  "module": "src/index.ts",
+  "type": "module",
   "scripts": {
-    "build": "bun run --filter '*' build",
-    "lint": "bun run --filter '*' lint",
     "format": "bun run --filter '*' format",
-    "test": "bun run --filter '*' test",
-    "prepare": "husky"
+    "lint": "bun run --filter '*' lint"
   },
-  "author": "Davi Patricio <davipatricio@pm.me>",
-  "license": "MIT",
-  "workspaces": ["packages/*"],
   "devDependencies": {
-    "@biomejs/biome": "^1.9.3",
-    "@types/bun": "^1.1.10",
-    "husky": "^9.1.6",
-    "typescript": "^5.6.2"
-  }
+    "@biomejs/biome": "^1.9.4",
+    "@types/bun": "^1.1.13"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.1-rc"
+  },
+  "workspaces": ["packages/*"]
 }
